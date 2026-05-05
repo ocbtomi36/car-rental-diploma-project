@@ -1,0 +1,61 @@
+const TransactionModell = require('../model/transaction/transactionModell');
+
+
+exports.getAllTransactions = async (req,res,next) => {
+    if(req.user_role === 'customer') {
+            return res.status(403).json({ message: 'Access denied'})
+    }
+    try {
+        const transactions = await TransactionModell.getAllTransaction();
+    if(transactions !== null) { 
+        res.status(200).json({message: 'Querry success', data: transactions});
+    } else { 
+        res.status(200).json({message: 'There is no data in database'});
+     }
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+}
+
+exports.insertTransaction = async (req,res,next) => {
+    if(req.user_role === 'customer') {
+            return res.status(403).json({ message: 'Access denied'})
+    }
+    const { transaction_name, cars_idcar } = req.body;
+    const carStatus = req.carDb.status;
+    const users_iduser = req.iduser;
+    if(((carStatus === 'available' && transaction_name === 'suspended') || (carStatus === 'suspended' && transaction_name === 'activated')) && req.user_role !== 'admin') {
+        return res.status(403).json({ message: 'You dont have any permisson to do suspend and activate transaction'})
+    }
+    try {
+        if (carStatus === 'available' && ( transaction_name === 'rent' || transaction_name === 'sold' || transaction_name === 'inservice' || transaction_name === 'suspended')) {
+            const insertTransaction = new TransactionModell(transaction_name, users_iduser, cars_idcar);
+            await insertTransaction.insertTransaction();
+            return res.status(200).json({ message: 'Insert successfully'})
+        }
+        else if( carStatus === 'rented' && transaction_name === 'rented-back'){
+            const insertTransaction = new TransactionModell(transaction_name, users_iduser, cars_idcar);
+            await insertTransaction.insertTransaction();
+            return res.status(200).json({ message: 'Insert successfully'})
+        }
+        else if( carStatus === 'sold' && transaction_name === 'buyback'){
+            const insertTransaction = new TransactionModell(transaction_name, users_iduser, cars_idcar);
+            await insertTransaction.insertTransaction();
+            return res.status(200).json({ message: 'Insert successfully'})
+        }
+        else if( carStatus === 'inservice' && transaction_name === 'service-back'){
+            const insertTransaction = new TransactionModell(transaction_name, users_iduser, cars_idcar);
+            await insertTransaction.insertTransaction();
+            return res.status(200).json({ message: 'Insert successfully'})
+        }
+        else if( carStatus === 'suspended' && transaction_name === 'activated'){
+            const insertTransaction = new TransactionModell(transaction_name, users_iduser, cars_idcar);
+            await insertTransaction.insertTransaction();
+            return res.status(200).json({ message: 'Insert successfully'})
+        } else {
+            return res.status(400).json({ message: 'Invalid transaction' });
+        }
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+}
