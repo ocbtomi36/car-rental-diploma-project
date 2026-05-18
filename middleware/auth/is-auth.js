@@ -1,4 +1,4 @@
-const jvt = require('jsonwebtoken');
+const jWt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
     const authHeader = req.get('Authorization');
@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
     const token = req.get('Authorization').split(' ')[1];
     let decodedToken;
     try {
-        decodedToken = jvt.verify(token, 'somesupersecretsecret');
+        decodedToken = jwt.verify(token, process.env.JWT_PASSWORD);
     } catch(err) {
         return res.status(500).json({message: 'An authentication error occured'});
     }

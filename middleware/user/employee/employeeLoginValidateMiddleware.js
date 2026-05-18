@@ -7,7 +7,6 @@ class employeeLoginValidateMiddleware {
             
             try{
                 const loadedUser = await User.getOneUserByIncommingEmail(email);
-                console.log(loadedUser);
                 if(loadedUser === null){
                     return res.status(401).json({ message: 'There is no user with that email' })
                 }

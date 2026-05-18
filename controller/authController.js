@@ -15,9 +15,6 @@ exports.signup = async (req, res, next) => {
         console.log(is_employed);
         const hashedPassword = await bcrypt.hash(password,13);
         const fkAddress = await AddressService.insertAddress(locality_name,postal_code,street_name,street_type,house_number);
-        /* To do */
-        /* Mivel még nincs kész a Location modell ami az autokölcsönző címét tartalamazza, így még nem ellenőrizhető, hogy ha az a címet adja be a felhasználo
-        akkor azt el kell utasítani. */
         const insertingUser = new User(given_name,family_name,pin_number,user_role,email,hashedPassword,is_employed,fkAddress,phone_number);
         await insertingUser.saveEmployee();
         return res.status(201).json({ message: 'Employee is Created' })
@@ -29,13 +26,14 @@ exports.login = async(req,res,next) => {
     try{
     const loadedUser = req.user;
     const is_employed = req.user.is_employed;
+    const secret = process.env.JWT_PASSWORD;
     if(is_employed === 'no') {
        return res.status(401).json({message: "Inactive user cannot log in"})
     }
     const token = jwt.sign({
         email: loadedUser.email,
         iduser: loadedUser.iduser,
-    }, 'somesupersecretsecret');
+    }, secret);
     res.status(200).json({token: token, userId: loadedUser.iduser.toString()})
     } catch(error){
         console.log(error)
@@ -45,10 +43,3 @@ exports.login = async(req,res,next) => {
 exports.logout = async (req,res,next) => {
     console.log('To do user logout.')   
 }
-/** 
-
-"email":"login@login.hu",
-    "password":"tököl",
-
-
-*/
