@@ -18,5 +18,28 @@ router.get('/cars/suspended',authChain,CarDataValidateMiddleware.setCarStatus('s
 
 router.post('/car',authChain,validateAllowedFields(insertUpdateCarDatas),[carValidator],incommingDataResult,CarDataValidateMiddleware.checkLicencePlate,CarDataValidateMiddleware.checkVinNumber,CarDataValidateMiddleware.getLocationId,carController.insertCar)
 router.put('/car/:carsId',authChain,validateAllowedFields(insertUpdateCarDatas),[carValidator],incommingDataResult,CarDataValidateMiddleware.getLocationId,CarDataValidateMiddleware.checkCarId,carController.updateCar);
+/*
+{
+  "vin_number": "WVWZZZ1JZXW000001",
+  "car_performance": 150,
+  "engine_size": 1998,
+  "licence_plate": "MAB123",
+  "technical_validity": "2027-05-31",
+  "production_time": "1990-02-02",
+  "color": "red",
+  "bodytype": "cabrio",
+  "fuel": "benzin",
+  "location_name": "New Final Rent Car Office",
+  "manufacturer": "BMW",
+  "type":"X5"
+}
 
+
+
+
+
+
+
+
+*/
 module.exports = router;

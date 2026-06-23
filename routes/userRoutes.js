@@ -36,7 +36,9 @@ router.put('/customer/:iduser',authChain,validateUserIdParams,validateAllowedFie
 router.get('/employees',authChain, employeeController.getAllemployees);
 /* Elutasítja, ha nincs id */
 router.get('/employee', (req, res) => {
-    return res.status(400).json({ message: 'iduser is required' });
+    const error = new Error('iduser is required');
+    error.statusCode = 400;
+    return next(error);
 });
 /* Visszaad egy dolgozót */
 router.get('/employee/:iduser',authChain,validateUserIdParams,userDataValidateMiddleware.checkEmployeeId, employeeController.getOneEmployee);

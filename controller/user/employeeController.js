@@ -4,40 +4,41 @@ const bcrypt = require('bcryptjs');
 exports.getAllemployees = async (req,res,next) => {
     try {
         if(req.user_role === 'customer' || req.user_role === 'employee') {
-            return res.status(403).json({ message: 'Access denied'})
+            const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
         }
         const result = await User.getAllEmployeeData();
         if(result !== null) {
         res.status(200).json({message: 'Querry success', data: result});
         } else {
-        res.status(200).json({message: 'There is no data in database'})
+        res.status(200).json({message: 'There is no data in database', data: []})
         }
     } catch (error) {
-        res.status(500).json({message: error.message})
+        return next(error);
     }
 }
 
 exports.getOneEmployee = async (req,res,next) => {
     if(req.user_role === 'customer' || req.user_role === 'employee') {
-            return res.status(403).json({ message: 'Access denied'})
+            const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
     }
-    const { iduser } = req.params;
-    try {
-        const result = await User.getOneEmployeeDataById(iduser);
-    if(result !== null) {
-        res.status(200).json({message: 'Querry success', data: result});
-    } else {
-        res.status(200).json({message: 'There is no data in database'});
-    }
-    } catch (error) {
-        res.status(500).json({message: error.message})
-    }
+    const user = req.user;
+        if(user !== null) {
+            res.status(200).json({message: 'Querry success', data: user});
+        } else {
+            res.status(200).json({message: 'There is no Employee in database', data: []});
+        }
 }
 
 exports.updateEmployee = async (req,res,next) => {
     try {
         if(req.user_role === 'customer' || req.user_role === 'employee') {
-            return res.status(403).json({ message: 'Access denied'})
+            const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
         }
         const { given_name, family_name, pin_number, user_role ,email, password,phone_number,locality_name, postal_code, street_name, street_type, house_number } = req.body;
         const { iduser } = req.params;
@@ -51,12 +52,14 @@ exports.updateEmployee = async (req,res,next) => {
         if (isEmailOk && isPinOk) {
             const updatingUser = new User(given_name, family_name, pin_number, user_role, email,hashedPassword, is_employed,fkAddress, phone_number);
             await updatingUser.updateCustomerData(iduser);
-            return res.status(201).json({ message: 'User update success' });
+            return res.status(200).json({ message: 'User update success' });
         }
-        return res.status(401).json({ message: 'email or pin number must be unique' });
+        const error = new Error('email or pin number must be unique');
+            error.statusCode = 409;
+            return next(error);
 
     } catch (error) {
-        return res.status(500).json({message: error.message })
+        return next(error);
     }
 }
 exports.softDelete = async (req,res,next) => {

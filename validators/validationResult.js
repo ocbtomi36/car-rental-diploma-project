@@ -3,12 +3,13 @@ const { validationResult } = require('express-validator');
 const incommingDataResult = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).json({
-            message: 'Validation failed.',
-            errors: errors.array()
-        });
+        const error = new Error('Validation failed.');
+        error.statusCode = 422;
+        error.data = errors.array();
+
+        return next(error);
     }
-    next();
+    return next();
 };
 
 function typeNumberValidator(fieldname) {

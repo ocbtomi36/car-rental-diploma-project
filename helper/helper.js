@@ -10,14 +10,15 @@ const User = require('../model/user/userModell')
 
 async function getsUserRoleById(iduser) {
     try {
-        const resultUser = await User.getOneUserDataById(iduser);
+        const resultUser = await User.getOneUserDataFromUsersById(iduser);
+        console.log(resultUser);
         if(!resultUser) {
             return null;
         } else {
             return resultUser.user_role;
         }
     } catch (error) {
-        return undefined;
+        throw error;
     }
 }
 
@@ -25,9 +26,9 @@ function validateParam(paramName) {
     return (req, res, next) => {
         const id = req.params[paramName];
         if (!id || id.trim() === '' || !Number.isInteger(Number(id))) {
-            return res.status(400).json({
-                message: `Missing parameter: ${paramName}`
-            });
+            const error = new Error(`Invalid parameter: ${paramName}`);
+            error.statusCode = 400;
+            return next(error);
         }
         next();
     };

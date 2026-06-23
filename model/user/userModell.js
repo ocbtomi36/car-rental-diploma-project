@@ -26,6 +26,18 @@ module.exports = class User {
 
     /* User with both role */
 
+    static async getOneUserAuthDataFromUsersById(iduser) {
+        const validatedIduser = ModellValidator.validateId("iduser",iduser);
+        try {
+            const [row] = await db.query('SELECT fired_at, is_employed, user_role FROM users where iduser = ?', [validatedIduser]);
+            return row.length > 0 ? row[0] : null;
+        } catch (error) {
+            console.error('There is an error in database:', error);
+            throw error;
+        }
+    }
+
+
     static async getOneUserDataById(iduser){
         const validatedIduser = ModellValidator.validateId("iduser",iduser);
         try {
@@ -57,7 +69,6 @@ module.exports = class User {
         );
             return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
             throw error;
         }
     }
@@ -69,7 +80,6 @@ module.exports = class User {
             [this.given_name,this.family_name,this.pin_number, this.user_role,this.email,this.password,this.is_employed,this.addresses_idaddress, this.phone_number]);
             return result.insertId;
         } catch (error) {
-            console.error('There is an error in database:', error);
             throw error;
         }
     }
@@ -95,14 +105,12 @@ module.exports = class User {
         }
     }
     async updateEmployeeData(iduser) {
-        const validatedIduser = ModellValidator.validateId("iduser",iduser)
         try {
             const [ result ] = await db.execute('UPDATE users SET given_name = ?, family_name = ?, pin_number = ?, user_role = ?, email = ?, password = ?, `addresses_idaddress` = ?, phone_number = ? WHERE (iduser = ?);',
                 [this.given_name,this.family_name,this.pin_number,this.user_role,this.email,this.password,this.addresses_idaddress,this.phone_number,validatedIduser]);
             
-            return result.insertId;
+            return result
         } catch (error) {
-            console.error('There is an error in database:', error);
             throw error;
         }
     }

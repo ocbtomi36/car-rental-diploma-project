@@ -8,18 +8,19 @@ const AddressService = require('../service/address/addressService');
 exports.signup = async (req, res, next) => {
     try {
         if(req.user_role === 'customer' || req.user_role === 'employee') {
-            return res.status(403).json({ message: 'Access denied'})
+            const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
         }
         const { given_name, family_name, pin_number,phone_number, user_role, email, password,locality_name, postal_code, street_name, street_type, house_number } = req.body;
         const is_employed = "yes";
-        console.log(is_employed);
         const hashedPassword = await bcrypt.hash(password,13);
         const fkAddress = await AddressService.insertAddress(locality_name,postal_code,street_name,street_type,house_number);
         const insertingUser = new User(given_name,family_name,pin_number,user_role,email,hashedPassword,is_employed,fkAddress,phone_number);
         await insertingUser.saveEmployee();
         return res.status(201).json({ message: 'Employee is Created' })
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        return next(error);
     }
 }
 exports.login = async(req,res,next) => {  
