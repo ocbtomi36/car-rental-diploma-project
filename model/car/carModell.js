@@ -35,7 +35,7 @@ module.exports = class Car {
                 const [row] = await db.query('SELECT * FROM vw_cars');
                     return row.length > 0 ? row : null;
             } catch (error) {
-                console.error('There is an error in database:', error);
+                
                     throw error;
             }
     }
@@ -50,7 +50,7 @@ module.exports = class Car {
                 const [row] = await db.query('SELECT * FROM vw_cars where status = ?',[status]);
                     return row.length > 0 ? row : null;
             } catch (error) {
-                console.error('There is an error in database:', error);
+                
                     throw error;
             }
     }
@@ -77,8 +77,7 @@ module.exports = class Car {
             try {
                 const [row] = await db.query('SELECT * FROM cars where vin_number = ?',[validatedVinNumber]);
                     return row.length > 0 ? row[0] : null;
-            } catch (error) {
-                console.error('There is an error in database:', error);
+            } catch (error) {              
                     throw error;
             }
         }
@@ -88,7 +87,6 @@ module.exports = class Car {
                 const [row] = await db.query('SELECT * FROM cars where idcar = ?',[validatedCarId]);
                     return row.length > 0 ? row[0] : null;
             } catch (error) {
-                console.error('There is an error in database:', error);
                     throw error;
             }
         }
@@ -98,7 +96,6 @@ module.exports = class Car {
                 const [row] = await db.query('SELECT * FROM cars where licence_plate = ?',[validatedLicencePlate]);
                     return row.length > 0 ? row[0] : null;
             } catch (error) {
-                console.error('There is an error in database:', error);
                     throw error;
             }
         }

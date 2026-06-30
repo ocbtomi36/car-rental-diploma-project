@@ -12,7 +12,6 @@ module.exports = class ProductionTime {
                     [this.productionTime]);
                     return result.insertId;
                 } catch (error) {
-                    console.error('There is an error in database:', error);
                     throw error;
                 }
             }
@@ -21,7 +20,6 @@ module.exports = class ProductionTime {
             const [row] = await db.query('SELECT * FROM production_time where production_time = ?',[productionTime]);
                 return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
                 throw error;
         }
     }

@@ -14,7 +14,6 @@ module.exports = class LocalityName {
                 [this.locality_name]);
                 return result.insertId;
             } catch (error) {
-                console.error('There is an error in database:', error);
                 throw error;
             }
                  
@@ -25,7 +24,6 @@ module.exports = class LocalityName {
             const [row] = await db.query('SELECT * FROM locality_names where locality_name = ?',[localityName]);
                 return row.length > 0 ? row[0] : null;
             } catch (error) {
-                console.error('There is an error in database:', error);
                 throw error;
             }
     }

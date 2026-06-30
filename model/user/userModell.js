@@ -32,7 +32,7 @@ module.exports = class User {
             const [row] = await db.query('SELECT fired_at, is_employed, user_role FROM users where iduser = ?', [validatedIduser]);
             return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }
@@ -44,7 +44,7 @@ module.exports = class User {
             const [row] = await db.query('SELECT * FROM vw_user where iduser = ?', [validatedIduser]);
             return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }
@@ -55,7 +55,7 @@ module.exports = class User {
             const [row] = await db.query('SELECT iduser, pin_number FROM vw_user where pin_number = ?', [pin_number]);
             return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }
@@ -89,7 +89,7 @@ module.exports = class User {
             const [row] = await db.query('SELECT * FROM vw_employee');
             return row.length > 0 ? row : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }
@@ -100,7 +100,7 @@ module.exports = class User {
             const [row] = await db.query('SELECT * FROM vw_employee where iduser = ?', [validatedIduser]);
             return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }
@@ -122,7 +122,7 @@ module.exports = class User {
             const [ result ] = await db.execute('UPDATE users SET is_employed = ? WHERE (iduser = ?);',[is_employed,validatedIduser]);
             return result.insertId;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }
@@ -135,7 +135,7 @@ module.exports = class User {
             const [row] = await db.query('SELECT iduser FROM vw_employee where email = ?', [email]);
             return row.length > 0 ? row[0].iduser : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }
@@ -146,7 +146,7 @@ module.exports = class User {
             const [row] = await db.query('SELECT iduser FROM vw_employee where pin_number = ?', [pin_number]);
             return row.length > 0 ? row[0].iduser : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }
@@ -157,7 +157,7 @@ module.exports = class User {
             const [row] = await db.query('SELECT * FROM vw_employee where email = ?', [email]);
             return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }
@@ -169,7 +169,7 @@ module.exports = class User {
             [this.given_name,this.family_name,this.pin_number,'customer',null,null,null,this.addresses_idaddress,this.phone_number]);
             return result.insertId;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
          
@@ -179,7 +179,7 @@ module.exports = class User {
             const [row] = await db.query('SELECT * FROM vw_customer');
             return row.length > 0 ? row : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }
@@ -190,7 +190,7 @@ module.exports = class User {
             const [row] = await db.query('SELECT * FROM vw_customer where iduser = ?', [validatedIduser]);
             return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }
@@ -201,7 +201,7 @@ module.exports = class User {
                 [this.given_name,this.family_name,this.pin_number,this.user_role,this.email,this.password,this.is_employed,this.addresses_idaddress,this.phone_number,validatedIduser]);
             return result.insertId;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }
@@ -213,7 +213,7 @@ module.exports = class User {
             const [row] = await db.query('SELECT iduser,pin_number FROM vw_user where pin_number = ?', [pin_number]);
             return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
+            
             throw error;
         }
     }

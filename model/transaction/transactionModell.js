@@ -20,7 +20,6 @@ module.exports = class Transaction {
             const [row] = await db.query('SELECT * FROM vw_transaction');
             return row.length > 0 ? row : null;
         } catch(error){
-            console.error('There is an error in database:', error);
             throw error;
         }
     }
@@ -31,7 +30,6 @@ module.exports = class Transaction {
                 [this.transaction_name, this.users_iduser, this.cars_idcar]);
                 return result.insertId;
             } catch (error) {
-                console.error('There is an error in database:', error);
                 throw error;
             }
         }

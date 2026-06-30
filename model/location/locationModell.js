@@ -19,7 +19,6 @@ module.exports = class Location {
             const [row] = await db.query('SELECT * FROM vw_location');
             return row.length > 0 ? row : null;
         } catch(error){
-            console.error('There is an error in database:', error);
             throw error;
         }
     }
@@ -30,7 +29,6 @@ module.exports = class Location {
             const [row] = await db.query('SELECT * FROM vw_location where idlocation = ?;',[idlocation]);    
             return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
             throw error;
         }
     }
@@ -41,7 +39,7 @@ module.exports = class Location {
                 [this.location_name, this.phone_number, this.addresses_idaddress]);
                 return result.insertId;
             } catch (error) {
-                console.error('There is an error in database:', error);
+
                 throw error;
             }
         }
@@ -62,7 +60,6 @@ module.exports = class Location {
             const [row] = await db.query('SELECT * FROM vw_location where location_name = ?',[location_name]);
                 return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
                 throw error;
             }
         }
@@ -73,7 +70,6 @@ module.exports = class Location {
             const [row] = await db.query('SELECT * FROM vw_location where phone_number = ?',[phone_number]);
                 return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
                 throw error;
             }
         }
@@ -83,7 +79,6 @@ module.exports = class Location {
             const [row] = await db.query('SELECT * FROM locations where addresses_idaddress = ?',[fkAdresses]);
                 return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
                 throw error;
             }
         }
@@ -93,7 +88,6 @@ module.exports = class Location {
             const [row] = await db.query('SELECT * FROM vw_location where idlocation = ?',[incommingId]);
                 return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error(error);
             throw error;
         }
     }

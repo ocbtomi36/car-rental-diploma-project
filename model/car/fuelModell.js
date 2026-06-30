@@ -16,7 +16,6 @@ module.exports = class Fuel {
                     [this.fuel]);
                     return result.insertId;
                 } catch (error) {
-                    console.error('There is an error in database:', error);
                     throw error;
                 }
             }
@@ -26,7 +25,6 @@ module.exports = class Fuel {
             const [row] = await db.query('SELECT * FROM fuels where fuel = ?',[validatedFuel]);
                 return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
                 throw error;
             }
     }

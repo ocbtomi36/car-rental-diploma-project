@@ -23,7 +23,6 @@ module.exports = class Address {
                     [this.postal_code,this.street_name,this.house_number,this.locality_names_idlocality_name,this.street_types_idstreet_type,]);
                     return result.insertId;
                 } catch (error) {
-                    console.error('There is an error in database:', error);
                     throw error;
                 }
                  
@@ -35,7 +34,6 @@ module.exports = class Address {
                     [this.postal_code,this.street_name,this.house_number,this.locality_names_idlocality_name,this.street_types_idstreet_type]);
                     return row.length > 0 ? row[0] : null;
                 } catch (error) {
-                    console.error('There is an error in database:', error);
                     throw error;
                 }
         }
@@ -44,7 +42,6 @@ module.exports = class Address {
             try{
                 const [row] = await db.query('SELECT * FROM addresses where idaddresses = ?', [addressId]);
             } catch (error){
-                console.error('There is an error in database:', error);
                     throw error;
             }
     }

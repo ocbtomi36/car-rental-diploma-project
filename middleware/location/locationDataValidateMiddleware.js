@@ -32,7 +32,6 @@ class LocationDataValidateMiddleware {
         next();
     }
     static async checkLocationId(req,res,next) {
-        console.log(req.params['idlocation']);
         const { idlocation } = req.params;
         const getLocation = await Location.getOneLocationDataById(idlocation);
         if(getLocation === null) {

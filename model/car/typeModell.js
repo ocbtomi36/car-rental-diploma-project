@@ -14,7 +14,6 @@ module.exports = class TypeModell {
                     [this.type]);
                     return result.insertId;
                 } catch (error) {
-                    console.error('There is an error in database:', error);
                     throw error;
                 }
             }
@@ -25,7 +24,6 @@ module.exports = class TypeModell {
             const [row] = await db.query('SELECT * FROM types where type = ?',[validatedType]);
                 return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
                 throw error;
             }
     }

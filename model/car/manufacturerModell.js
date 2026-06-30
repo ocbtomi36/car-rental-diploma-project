@@ -14,7 +14,6 @@ module.exports = class Manufacturer {
                     [this.manufacturer]);
                     return result.insertId;
                 } catch (error) {
-                    console.error('There is an error in database:', error);
                     throw error;
                 }
             }
@@ -24,7 +23,6 @@ module.exports = class Manufacturer {
             const [row] = await db.query('SELECT * FROM manufacturers where manufacturer = ?',[validatedManufacturer]);
                 return row.length > 0 ? row[0] : null;
         } catch (error) {
-            console.error('There is an error in database:', error);
                 throw error;
             }
     }
