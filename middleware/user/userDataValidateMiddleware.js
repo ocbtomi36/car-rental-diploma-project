@@ -4,11 +4,17 @@ class UserDataValidateMiddleware {
 
    static async checkCustomerId(req,res,next) {
         const { iduser } = req.params;
-        const getUser = await User.getOneCustomerDataById(iduser);
-        if(getUser === null) {
-            return res.status(409).json({ message: 'There is no customer with that id'})
+
+        try{
+            const getUser = await User.getOneCustomerDataById(iduser);
+            if(getUser === null) {
+                return res.status(409).json({ message: 'There is no customer with that id'})
+            }
+            req.user = getUser;
+            next();
+        } catch (error) {
+            next(error)
         }
-        next();
     }
 
     static async checkEmployeeId(req,res,next) {

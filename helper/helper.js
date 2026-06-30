@@ -10,8 +10,7 @@ const User = require('../model/user/userModell')
 
 async function getsUserRoleById(iduser) {
     try {
-        const resultUser = await User.getOneUserDataFromUsersById(iduser);
-        console.log(resultUser);
+        const resultUser = await User.getOneUserAuthDataFromUsersById(iduser);
         if(!resultUser) {
             return null;
         } else {

@@ -3,7 +3,9 @@ const TransactionModell = require('../model/transaction/transactionModell');
 
 exports.getAllTransactions = async (req,res,next) => {
     if(req.user_role === 'customer') {
-            return res.status(403).json({ message: 'Access denied'})
+            const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
     }
     try {
         const transactions = await TransactionModell.getAllTransaction();
@@ -13,7 +15,7 @@ exports.getAllTransactions = async (req,res,next) => {
         res.status(200).json({message: 'There is no data in database'});
      }
     } catch (error) {
-        res.status(500).json({message: error.message})
+        return next(error);
     }
 }
 
@@ -25,7 +27,10 @@ exports.insertTransaction = async (req,res,next) => {
     const carStatus = req.carDb.status;
     const users_iduser = req.iduser;
     if(((carStatus === 'available' && transaction_name === 'suspended') || (carStatus === 'suspended' && transaction_name === 'activated')) && req.user_role !== 'admin') {
-        return res.status(403).json({ message: 'You dont have any permisson to do suspend and activate transaction'})
+
+        const error = new Error('You dont have any permisson to do suspend and activate transaction');
+        error.statusCode = 403;
+        return next(error);
     }
     try {
         if (carStatus === 'available' && ( transaction_name === 'rent' || transaction_name === 'sold' || transaction_name === 'inservice' || transaction_name === 'suspended')) {
@@ -56,6 +61,6 @@ exports.insertTransaction = async (req,res,next) => {
             return res.status(400).json({ message: 'Invalid transaction' });
         }
     } catch (error) {
-        res.status(500).json({message: error.message})
+        return next(error);
     }
 }

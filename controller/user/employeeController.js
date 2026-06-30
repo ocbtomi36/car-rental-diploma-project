@@ -64,36 +64,44 @@ exports.updateEmployee = async (req,res,next) => {
 }
 exports.softDelete = async (req,res,next) => {
     if(req.user_role === 'customer' || req.user_role === 'employee') {
-            return res.status(403).json({ message: 'Access denied'})
+           const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
         }
     try {
         const { iduser } = req.params;
         const dbIsEmployed = req.user.is_employed;
         if(dbIsEmployed === 'no') {
-            return res.status(409).json({ message: 'deactivated user cannot set deactive again' });
+            const error = new Error('Deactivated user cannot set deacive again');
+            error.statusCode = 403;
+            return next(error);
         }
         const is_employed = 'no';
         await User.setEmployeeStatus(iduser,is_employed);
         res.status(200).json({ message: 'User deactivated successfully' });
     } catch (error) {
-        return res.status(500).json({message: error.message});
+        return next(error)
     }
 }
 
 exports.reActivate = async (req,res,next) => {
     if(req.user_role === 'customer' || req.user_role === 'employee') {
-            return res.status(403).json({ message: 'Access denied'})
+        const error = new Error('Access denied');
+        error.statusCode = 403;
+        return next(error);
     }
     try {
         const { iduser } = req.params;
         const dbIsEmployed = req.user.is_employed;
         if(dbIsEmployed === 'yes') {
-            return res.status(409).json({ message: 'active user cannot set acive again' });
+        const error = new Error('Active user cannot set active again');
+        error.statusCode = 409;
+        return next(error);
         }
         const is_employed = 'yes'
         await User.setEmployeeStatus(iduser,is_employed);
         res.status(200).json({ message: 'User activated successfully' });
     } catch (error) {
-        return res.status(500).json({message: error.message});
+        return next(error);
     }
 }

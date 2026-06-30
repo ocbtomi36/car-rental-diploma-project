@@ -20,8 +20,8 @@ class employeeLoginValidateMiddleware {
                 req.user = loadedUser;
                 next();
             } catch (error) {
-                console.log(error);
-                res.status(500).json({ message: 'An login error occured'})
+                
+                return next(error);
             }
         }
 }

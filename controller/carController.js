@@ -8,7 +8,9 @@ const ProductionTimeService = require('../service/car/productionTimeService');
 exports.getAllCars = async (req,res,next) => {
 
     if(req.user_role === 'customer') {
-            return res.status(403).json({ message: 'Access denied'})
+            const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
     }
     try {
         const cars = await CarModell.getAllCars();
@@ -18,14 +20,16 @@ exports.getAllCars = async (req,res,next) => {
             res.status(200).json({message: 'There is no data in database'});
         }
     } catch (error) {
-        res.status(500).json({message: error.message})
+       return next(error);
     }
 }
 
 exports.getAllCarsByStatus = async (req,res,next) => {
 
     if(req.user_role === 'customer') {
-            return res.status(403).json({ message: 'Access denied'})
+           const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
     }
     try {
         const status = req.status;
@@ -36,11 +40,15 @@ exports.getAllCarsByStatus = async (req,res,next) => {
             res.status(200).json({message: 'There is no data in database'});
         }
     } catch (error) {
-        res.status(500).json({message: error.message})
+        return next(error);
     }
 }
 exports.insertCar = async (req,res,next) => {
-    // jogosultság hiányzik
+    if(req.user_role === 'customer') {
+           const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
+    }
     const { vin_number, car_performance, engine_size, licence_plate, technical_validity, production_time, color, bodytype, fuel, manufacturer, type } = req.body;
     try {
         const idlocation = req.idlocation;
@@ -53,32 +61,41 @@ exports.insertCar = async (req,res,next) => {
         const id = await insertCar.saveCar();
         return res.status(201).json({ message: "Car inserted successfully", carId: id});
         } catch (error) {
-        res.status(500).json({message: error.message})
+        return next(error);
     }
 }
 exports.updateCar = async (req,res,next) => {
+
+    if(req.user_role === 'customer') {
+           const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
+    }
+
     const { vin_number, car_performance, engine_size, licence_plate, technical_validity, production_time, color, bodytype, fuel, manufacturer, type, idLocation } = req.body;
     try{
         const idlocation = req.idlocation;
         const { carsId } = req.params;
-        console.log(carsId);
         const carDbObject = req.carDb;
         const carDbVinNumber = carDbObject.vin_number;
         const carDbLicencePlate = carDbObject.licence_plate;
         let validatedVinNumber;
         let validatedLicencePlate;
         if (carDbVinNumber !== vin_number){
-            // Vin number is exist in db by an other record
+           
             const getCarObjByVinNumber = await CarModell.getCarByVinNumber(vin_number);
             if(getCarObjByVinNumber !== null){
-                return res.status(409).json({ message: "Vin number is already exsist in db"})
+                const error = new Error("Vin number is already exsist in db");
+                error.statusCode = 409;
+                return next(error);
             }
         }
         if (carDbLicencePlate !== licence_plate){
-            // Licence plate is exist in db by other record
             const getCarObjByLicencePlate = await CarModell.getCarByLicencePlate(licence_plate);
             if(getCarObjByLicencePlate !== null){
-                return res.status(409).json({ message: "Vin number is already exsist in db"})
+                const error = new Error("Licence plate is already exsist in db");
+                error.statusCode = 409;
+                return next(error);
             }
         }
         validatedVinNumber = vin_number;
@@ -92,6 +109,6 @@ exports.updateCar = async (req,res,next) => {
         await updatedCar.updateCar(carsId);
         return res.status(201).json({ message: "Car updated successfully"});
     } catch (error) {
-        res.status(500).json({message: error.message})
+        return next(error);
     }
 }

@@ -3,7 +3,9 @@ const AddressService = require('../service/address/addressService');
 
 exports.getAllLocation = async (req,res,next) => {
     if(req.user_role === 'customer') {
-            return res.status(403).json({ message: 'Access denied'})
+        const error = new Error('Access denied');
+        error.statusCode = 403;
+        return next(error);
     }
     try {
         const locations = await LocationModell.getAllLocation();
@@ -13,52 +15,57 @@ exports.getAllLocation = async (req,res,next) => {
         res.status(200).json({message: 'There is no data in database'});
      }
     } catch (error) {
-        res.status(500).json({message: error.message})
+        return next(error);
     }
 }
 exports.getOneLocation = async (req,res,next) => {
     if(req.user_role === 'customer') {
-            return res.status(403).json({ message: 'Access denied'})
+        const error = new Error('Access denied');
+        error.statusCode = 403;
+        return next(error);
     }
     const { idlocation } = req.params;
     try {
         LocationModell.getOneLocationDataById(idlocation);
         res.status(200).json({message: 'Querry success', data: req.location});
     } catch (error) {
-        res.status(500).json({message: error.message})
+        return next(error);
     }
 }
-/* Csak tulajdonos adhat hozzá mert  */
+
 exports.addLocation = async (req,res,next) => {
     if(req.user_role !== 'admin' ) {
-            return res.status(403).json({ message: 'Access denied'})
+            const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
     }
     try {
         const { location_name, phone_number,locality_name, postal_code, street_name, street_type, house_number } = req.body;
         let fkAddress = await AddressService.insertAddress(locality_name, postal_code, street_name, street_type, house_number);
-        console.log(fkAddress);
         const insertLocation = new LocationModell(location_name, phone_number,fkAddress);
         await insertLocation.saveLocation();
         res.status(201).json({ message: 'Location is Created' });
-        console.log(insertLocation);
         } catch (error) {
-        res.status(500).json({message: error.message})
+        return next(error);
     }
 }
+// to do
 exports.updateLocation = async (req,res,next) => {
     if(req.user_role !== 'admin' ) {
-        return res.status(403).json({ message: 'Access denied'})
+        const error = new Error('Access denied');
+        error.statusCode = 403;
+        return next(error);
     }
     try {
         const { location_name, phone_number,locality_name, postal_code, street_name, street_type, house_number } = req.body;
         const { idlocation } = req.params;
     } catch (error) {
-        return res.status(500).json({message: "An error occured"})
+        return next(error);
     }
 }
 
 /*
-
+nincs kész
 const getLocationObject = await LocationModell.getLocationById(idlocation);
         const fkAddress = await AddressService.insertAddress(locality_name, postal_code, street_name, street_type, house_number);
         let fkAddressByIncommingId = await LocationModell.getLocationByFkAdderesses(fkAddress);
@@ -84,3 +91,6 @@ const getLocationObject = await LocationModell.getLocationById(idlocation);
 
 
 */
+
+
+

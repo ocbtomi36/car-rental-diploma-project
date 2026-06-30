@@ -23,6 +23,12 @@ app.use('/locations',loacationRoutes);
 app.use('/cars',carRoutes);
 app.use('/transactions',transactionRoutes);
 
+app.use((req, res, next) => {
+    const error = new Error('Route not found');
+    error.statusCode = 404;
+    next(error);
+});
+
 app.use((error, req,res,next) => {
     const status = error.statusCode || 500;
     const message = error.message;

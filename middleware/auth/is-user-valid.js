@@ -5,14 +5,18 @@ module.exports = async (req,res,next)=> {
     try {
         const resultUserRole = await getsUserRoleById(req.iduser);
         if(resultUserRole === null) {
-            res.status(401).json({message: 'User not found or invalid token'})
+            const error = new Error('User not found or invalid token');
+            error.statusCode = 401;
+            return next(error);
         }
         if(resultUserRole === undefined) {
-            res.status(500).json({message: 'An error occured by user querry'})
+            const error = new Error('An error occured by querry');
+            error.statusCode = 500;
+            return next(error);
         }
         req.user_role = resultUserRole;
     } catch {
-        res.status(500).json({message: error.message})
+       next(error)
     }
     
     next();

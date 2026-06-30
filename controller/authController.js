@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const User = require('../model/user/userModell');
 const AddressService = require('../service/address/addressService');
 
-/* Add new employee to the database */
+
 exports.signup = async (req, res, next) => {
     try {
         if(req.user_role === 'customer' || req.user_role === 'employee') {
@@ -29,7 +29,9 @@ exports.login = async(req,res,next) => {
     const is_employed = req.user.is_employed;
     const secret = process.env.JWT_PASSWORD;
     if(is_employed === 'no') {
-       return res.status(401).json({message: "Inactive user cannot log in"})
+        const error = new Error("Inactive user cannot log in");
+        error.statusCode = 401;
+        return next(error);
     }
     const token = jwt.sign({
         email: loadedUser.email,
@@ -37,10 +39,7 @@ exports.login = async(req,res,next) => {
     }, secret);
     res.status(200).json({token: token, userId: loadedUser.iduser.toString()})
     } catch(error){
-        console.log(error)
-        res.status(500).json({message: 'An login error occured'})
+
+        return next(error);
     }
-}
-exports.logout = async (req,res,next) => {
-    console.log('To do user logout.')   
 }
