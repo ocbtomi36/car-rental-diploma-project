@@ -43,7 +43,7 @@ exports.addLocation = async (req,res,next) => {
         return next(error);
     }
 }
-// to do
+
 exports.updateLocation = async (req,res,next) => {
     if(req.user_role !== 'admin' ) {
         const error = new Error('Access denied');
@@ -53,28 +53,28 @@ exports.updateLocation = async (req,res,next) => {
     try {
         const { location_name, phone_number,locality_name, postal_code, street_name, street_type, house_number } = req.body;
         const { idlocation } = req.params;
-        let updateLocationName;
-        let updatePhoneNumber;
-        const fkAddress = await AddressService.insertAddress(locality_name, postal_code, street_name, street_type, house_number);
         const locationObjByParam = req.location; 
+        const fkAddress = await AddressService.insertAddress(locality_name, postal_code, street_name, street_type, house_number);
         const locationObjectByLocationName = await LocationModell.getLocationObjByLocationName(location_name);
+        let updateLocationName;
         if(locationObjectByLocationName !== null) {
             if(locationObjectByLocationName.idlocation !== locationObjByParam.idlocation) {
-                const error = new Error('Access denied');
+                const error = new Error('Location name is alredy exist in database');
                 error.statusCode = 409;
                 return next(error);
             }
         }
-        updateLocationName = locationObjectByLocationName.location_name;
+        updateLocationName = location_name;
         const locationObjectByPhoneNumber = await LocationModell.getLocationObjByPhoneNum(phone_number);
+        let updatePhoneNumber;
         if(locationObjectByPhoneNumber !== null) {
             if(locationObjectByPhoneNumber.idlocation !== locationObjByParam.idlocation) {
-                const error = new Error('Access denied');
+                const error = new Error('Phone Number is alredy exist in database');
                 error.statusCode = 409;
                 return next(error);
             }
         }
-        updatePhoneNumber = locationObjectByPhoneNumber.location_name;
+        updatePhoneNumber = phone_number;
         const updateLocation = new LocationModell(updateLocationName,updatePhoneNumber,fkAddress);
         await updateLocation.updateLocation();
         res.status(201).json({ message: 'Location is Updated', data: updateLocation });
@@ -82,5 +82,3 @@ exports.updateLocation = async (req,res,next) => {
         return next(error);
     }
 }
-
-
