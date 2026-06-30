@@ -8,14 +8,18 @@ class employeeLoginValidateMiddleware {
             try{
                 const loadedUser = await User.getOneUserByIncommingEmail(email);
                 if(loadedUser === null){
-                    return res.status(401).json({ message: 'There is no user with that email' })
+                    const error = new Error('There is no user with that email');
+                    error.statusCode = 401;
+                    return next(error);
                 }
                 const loadedPassword = loadedUser.password;
                 const isPasswordMatch = await bcrypt.compare(password,loadedPassword);
                 
                 
                 if(!isPasswordMatch){
-                    return res.status(401).json({ message: 'Wrong password' })
+                    const error = new Error('wrong password');
+                    error.statusCode = 401;
+                    return next(error);             
                 }
                 req.user = loadedUser;
                 next();

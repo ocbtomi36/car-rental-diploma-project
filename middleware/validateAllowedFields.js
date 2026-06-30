@@ -4,10 +4,10 @@ const validateAllowedFields = (allowedFields) => {
       .filter(key => !allowedFields.includes(key));
 
     if (extraFields.length > 0) {
-      return res.status(400).json({
-        message: 'Unexpected fields',
-        fields: extraFields
-      });
+       const error = new Error('Unexpected fields');
+      error.statusCode = 400;
+      error.data = extraFields;
+      return next(error);
     }
 
     next();

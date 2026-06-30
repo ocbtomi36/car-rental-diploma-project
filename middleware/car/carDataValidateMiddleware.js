@@ -8,17 +8,21 @@ class CarDataValidateMiddleware {
         const allowed = ['available','rented','inservice','sold','suspended'];
 
                 if (!allowed.includes(status)){
-                    throw new Error('Invalid status')
+                    const error = new Error('Invalid status');
+                    error.statusCode = 400;
+                    return next(error);
                 }
-        req.status = status;
-        next();
-    }
+            req.status = status;
+            next();
+        }
 
     static async checkCarId(req,res,next){
         const { carsId } = req.params;
         const carDb = await Car.getCarById(carsId);
         if(carDb === null) {
-            return res.status(409).json({ message: 'there is no car with that id'})
+            const error = new Error('There is no car with that id');
+            error.statusCode = 409;
+            return next(error);
         }
         req.carDb = carDb;
         next();
@@ -28,7 +32,9 @@ class CarDataValidateMiddleware {
         const { cars_idcar } = req.body;
         const carDb = await Car.getCarById(cars_idcar);
         if(carDb === null) {
-            return res.status(409).json({ message: 'there is no car with that id'})
+            const error = new Error('There is no car with that id');
+            error.statusCode = 409;
+            return next(error);
         }
         req.carDb = carDb;
         next();
@@ -39,7 +45,9 @@ class CarDataValidateMiddleware {
         const { vin_number } = req.body;
         const getVinNumber = await Car.getCarByVinNumber(vin_number);
         if(getVinNumber !== null){
-            return res.status(409).json({ message: 'vin number must be unique'})
+            const error = new Error('Vin number must be uique');
+            error.statusCode = 409;
+            return next(error);
         }
         next();
     }
@@ -47,7 +55,9 @@ class CarDataValidateMiddleware {
         let { licence_plate } = req.body;
         const getLicencePlate = await Car.getCarByLicencePlate(licence_plate);
         if(getLicencePlate !==  null){
-            return res.status(409).json({ message: ' licence plate is already exist'})
+            const error = new Error('Licence plate is already exsist');
+            error.statusCode = 409;
+            return next(error);
         }
         next();
     }
@@ -55,7 +65,9 @@ class CarDataValidateMiddleware {
         const { location_name } = req.body;
         const getLocationObject = await Location.getLocationIdByLocationName(location_name);
         if(getLocationObject === null) {
-            return res.status(409).json({ message: 'there is no location with that id'})
+            const error = new Error('There is no location with that id');
+            error.statusCode = 409;
+            return next(error);
         }
         req.idlocation = getLocationObject.idlocation;
         next();

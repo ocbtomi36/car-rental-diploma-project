@@ -15,18 +15,11 @@ const validateIdParams = validateParam('idlocation');
 const locationController = require('../controller/locationController');
 /* Visszaadja az összes telephelyet */
 router.get('/locations',authChain,locationController.getAllLocation);
-/* Elutasítja, ha nincs id */
-router.get('/location', (req, res) => {
-    return res.status(400).json({ message: 'idlocation is required' });
-});
 /* Visszaad egy telehphelyet */
 router.get('/location/:idlocation',authChain,validateIdParams,locationDataValidateMiddleware.checkLocationId,locationController.getOneLocation);
 /* Hozzáad egy új telephelyet Location name ,phone number unique*/
 router.post('/location',authChain,validateAllowedFields(insertUpdateLocationFields),[locationValidator, addressValidator],incommingDataResult,locationDataValidateMiddleware.checkLocationName,locationDataValidateMiddleware.checkPhoneNumberNumber,locationController.addLocation);
-/* Elutasítja, ha nincs id */
-router.post('/location', (req, res) => {
-    return res.status(400).json({ message: 'idlocation is required' });
-});
+
 /* Módosít egy telephely adatait */
 router.post('/location/:idlocation',authChain,validateIdParams,validateAllowedFields(insertUpdateLocationFields),[locationValidator, addressValidator],incommingDataResult,locationController.updateLocation);
 module.exports = router

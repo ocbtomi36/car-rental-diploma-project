@@ -4,11 +4,12 @@ class UserDataValidateMiddleware {
 
    static async checkCustomerId(req,res,next) {
         const { iduser } = req.params;
-
         try{
             const getUser = await User.getOneCustomerDataById(iduser);
             if(getUser === null) {
-                return res.status(409).json({ message: 'There is no customer with that id'})
+                 const error = new Error('There is no customer with that id');
+                error.statusCode = 409;
+                return next(error);
             }
             req.user = getUser;
             next();
@@ -19,9 +20,13 @@ class UserDataValidateMiddleware {
 
     static async checkEmployeeId(req,res,next) {
         const { iduser } = req.params;
-        let getUser;
         try {
-            getUser = await User.getOneEmployeeDataById(iduser);
+            const getUser = await User.getOneEmployeeDataById(iduser);
+             if(getUser === null) {
+                 const error = new Error('There is no employee with that id');
+                error.statusCode = 409;
+                return next(error);
+            }
             req.user = getUser;
             next();
         } catch (error) {
@@ -33,7 +38,10 @@ class UserDataValidateMiddleware {
         const { users_iduser } = req.body;
         const getUser = await User.getOneEmployeeDataById(users_iduser);
         if(getUser === null) {
-            return res.status(409).json({ message: 'There is no employee with that id'})
+
+            const error = new Error('There is no emplyoee with that id');
+            error.statusCode = 409;
+            return next(error);
         }
         req.user = getUser;
         next();

@@ -16,59 +16,29 @@ const insertUpdateEmployeeFields = ["given_name","family_name","pin_number","use
 const validateUserIdParams = validateParam('iduser');
 /* Visszaadja az összes vásárlót */
 router.get('/customers',authChain, customerController.getAllCustomers);
-/* Tiltja ha nincs id */
-router.get('/customer', (req, res) => {
-    const error = new Error('iduser is required');
-    error.statusCode = 400;
-    return next(error);
-});
+
 /* Visszaadja egy vásárló adatat a kapott id-val */
-router.get('/customer/:iduser',authChain,validateUserIdParams,userDataValidateMiddleware.checkCustomerId,customerController.getOneCustomer); // 
+router.get('/customer/:iduser',authChain,validateUserIdParams,userDataValidateMiddleware.checkCustomerId,customerController.getOneCustomer); 
 /* Létrehoz egy új vásárlót */
 router.post('/customer',authChain,validateAllowedFields(insertUpdateCustomerFields),[customerJsonValidate,addressJsonValidate],incommingDataResult,userDataValidateMiddleware.checkPinNumber, customerController.addNewCustomer);
-/* Elutasítja, ha nincs id */
-router.put('/customer', (req, res) => {
-    const error = new Error('iduser is required');
-    error.statusCode = 400;
-    return next(error);
-});
+
 /* Módosít egy vásárló adatait a kapott id alapján */
 router.put('/customer/:iduser',authChain,validateUserIdParams,validateAllowedFields(insertUpdateCustomerFields),[customerJsonValidate,addressJsonValidate],incommingDataResult,userDataValidateMiddleware.checkCustomerId,customerController.updateCustomer); 
 
 
 /*  Visszaadja az összes dolgozót  csak manager vagy admin */ 
 router.get('/employees',authChain, employeeController.getAllemployees);
-/* Elutasítja, ha nincs id */
-router.get('/employee', (req, res) => {
-    const error = new Error('iduser is required');
-    error.statusCode = 400;
-    return next(error);
-});
+
 /* Visszaad egy dolgozót */
 router.get('/employee/:iduser',authChain,validateUserIdParams,userDataValidateMiddleware.checkEmployeeId, employeeController.getOneEmployee);
-/* Elutasítja, ha nincs id */
-router.put('/employee', (req, res) => {
-   const error = new Error('iduser is required');
-    error.statusCode = 400;
-    return next(error);
-});
+
 /* Létrehoz egy dolgozót az az auth route-ban van */
 /* Modosít egy dolgozó adatait */
 router.put('/employee/:iduser',authChain,validateUserIdParams, validateAllowedFields(insertUpdateEmployeeFields),[customerJsonValidate,addressJsonValidate], incommingDataResult ,userDataValidateMiddleware.checkEmployeeId,userDataValidateMiddleware.checkUserRole,employeeController.updateEmployee); 
-/* Elutasítja, ha nincs id */
-router.put('/deactivate', (req, res) => {
-    const error = new Error('iduser is required');
-    error.statusCode = 400;
-    return next(error);
-});
+
 /* Softdelete an employee */
 router.put('/deactivate/:iduser',authChain,validateUserIdParams,userDataValidateMiddleware.checkEmployeeId,employeeController.softDelete);
-/* Elutasítja, ha nincs id */
-router.put('/reactivate', (req, res) => {
-    const error = new Error('iduser is required');
-    error.statusCode = 400;
-    return next(error);
-});
+
 /* Visszahelyezi állományba a felhasználót */
 router.put('/reactivate/:iduser',authChain,validateUserIdParams,userDataValidateMiddleware.checkEmployeeId,employeeController.reActivate);
 module.exports = router

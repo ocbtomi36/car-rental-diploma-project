@@ -21,7 +21,9 @@ exports.getAllTransactions = async (req,res,next) => {
 
 exports.insertTransaction = async (req,res,next) => {
     if(req.user_role === 'customer') {
-            return res.status(403).json({ message: 'Access denied'})
+            const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
     }
     const { transaction_name, cars_idcar } = req.body;
     const carStatus = req.carDb.status;
@@ -58,7 +60,9 @@ exports.insertTransaction = async (req,res,next) => {
             await insertTransaction.insertTransaction();
             return res.status(200).json({ message: 'Insert successfully'})
         } else {
-            return res.status(400).json({ message: 'Invalid transaction' });
+            const error = new Error('Invalid transaction');
+            error.statusCode = 400;
+            return next(error);
         }
     } catch (error) {
         return next(error);
