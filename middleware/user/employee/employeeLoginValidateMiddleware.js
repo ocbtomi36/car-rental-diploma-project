@@ -9,7 +9,7 @@ class employeeLoginValidateMiddleware {
                 const loadedUser = await User.getOneUserByIncommingEmail(email);
                 if(loadedUser === null){
                     const error = new Error('There is no user with that email');
-                    error.statusCode = 401;
+                    error.statusCode = 404;
                     return next(error);
                 }
                 const loadedPassword = loadedUser.password;

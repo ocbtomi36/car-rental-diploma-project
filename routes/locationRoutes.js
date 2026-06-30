@@ -21,5 +21,5 @@ router.get('/location/:idlocation',authChain,validateIdParams,locationDataValida
 router.post('/location',authChain,validateAllowedFields(insertUpdateLocationFields),[locationValidator, addressValidator],incommingDataResult,locationDataValidateMiddleware.checkLocationName,locationDataValidateMiddleware.checkPhoneNumberNumber,locationController.addLocation);
 
 /* Módosít egy telephely adatait */
-router.post('/location/:idlocation',authChain,validateIdParams,validateAllowedFields(insertUpdateLocationFields),[locationValidator, addressValidator],incommingDataResult,locationController.updateLocation);
+router.put('/location/:idlocation',authChain,validateIdParams,validateAllowedFields(insertUpdateLocationFields),[locationValidator, addressValidator],incommingDataResult,locationDataValidateMiddleware.checkLocationId,locationController.updateLocation);
 module.exports = router

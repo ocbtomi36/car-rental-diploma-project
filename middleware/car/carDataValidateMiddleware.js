@@ -21,11 +21,11 @@ class CarDataValidateMiddleware {
         const carDb = await Car.getCarById(carsId);
         if(carDb === null) {
             const error = new Error('There is no car with that id');
-            error.statusCode = 409;
+            error.statusCode = 404;
             return next(error);
         }
         req.carDb = carDb;
-        next();
+        return next();
     }
 
     static async checkCarIdByIncommingCarId(req,res,next){
@@ -33,11 +33,11 @@ class CarDataValidateMiddleware {
         const carDb = await Car.getCarById(cars_idcar);
         if(carDb === null) {
             const error = new Error('There is no car with that id');
-            error.statusCode = 409;
+            error.statusCode = 404;
             return next(error);
         }
         req.carDb = carDb;
-        next();
+        return next();
     }
 
 
@@ -49,7 +49,7 @@ class CarDataValidateMiddleware {
             error.statusCode = 409;
             return next(error);
         }
-        next();
+        return next();
     }
     static async checkLicencePlate(req,res,next) {
         let { licence_plate } = req.body;
@@ -59,18 +59,18 @@ class CarDataValidateMiddleware {
             error.statusCode = 409;
             return next(error);
         }
-        next();
+        return next();
     }
     static async getLocationId(req,res,next) {
         const { location_name } = req.body;
         const getLocationObject = await Location.getLocationIdByLocationName(location_name);
         if(getLocationObject === null) {
             const error = new Error('There is no location with that id');
-            error.statusCode = 409;
+            error.statusCode = 404;
             return next(error);
         }
         req.idlocation = getLocationObject.idlocation;
-        next();
+        return next();
     }
 
 

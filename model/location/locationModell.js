@@ -54,7 +54,7 @@ module.exports = class Location {
         }
     }  
     
-    static async getLocationIdByLocationName(location_name){
+    static async getLocationObjByLocationName(location_name){
         ModellValidator.validateOneField("location_name",location_name);
         try {
             const [row] = await db.query('SELECT * FROM vw_location where location_name = ?',[location_name]);
@@ -64,7 +64,7 @@ module.exports = class Location {
             }
         }
         
-    static async getPhoneNumByPhoneNum(phone_number){
+    static async getLocationObjByPhoneNum(phone_number){
         ModellValidator.validateOneField("phone number",phone_number);
         try {
             const [row] = await db.query('SELECT * FROM vw_location where phone_number = ?',[phone_number]);

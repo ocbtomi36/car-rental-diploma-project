@@ -8,7 +8,7 @@ class UserDataValidateMiddleware {
             const getUser = await User.getOneCustomerDataById(iduser);
             if(getUser === null) {
                  const error = new Error('There is no customer with that id');
-                error.statusCode = 409;
+                error.statusCode = 404;
                 return next(error);
             }
             req.user = getUser;
@@ -24,7 +24,7 @@ class UserDataValidateMiddleware {
             const getUser = await User.getOneEmployeeDataById(iduser);
              if(getUser === null) {
                  const error = new Error('There is no employee with that id');
-                error.statusCode = 409;
+                error.statusCode = 404;
                 return next(error);
             }
             req.user = getUser;
@@ -36,11 +36,10 @@ class UserDataValidateMiddleware {
 
     static async checkEmployeeIdByIncommingUserId(req,res,next) {
         const { users_iduser } = req.body;
-        const getUser = await User.getOneEmployeeDataById(users_iduser);
         if(getUser === null) {
-
+            const getUser = await User.getOneEmployeeDataById(users_iduser);
             const error = new Error('There is no emplyoee with that id');
-            error.statusCode = 409;
+            error.statusCode = 404;
             return next(error);
         }
         req.user = getUser;
