@@ -4,29 +4,18 @@ const ModellValidator = require('../modellValidadator');
 module.exports = class Car {    
 
     constructor(vin_number, car_performance, engine_size, licence_plate, technical_validity, production_time_idproduction_time, colors_idcolor, bodytypes_idbodytype, fuels_idfuel,locations_idlocation, manufacturer_type_id ){
-        ModellValidator.validateOneField("vin_number",vin_number);
-        ModellValidator.validateOneField("car_performance",car_performance); 
-        ModellValidator.validateOneField("engine_size",engine_size);
-        ModellValidator.validateOneField("licence_plate",licence_plate); 
-        ModellValidator.validateOneField("technical_validity",technical_validity); 
-        ModellValidator.validateOneField("production_time_idproduction_time",production_time_idproduction_time); 
-        const validatedColorIdColor = ModellValidator.validateId("colors_idcolor",colors_idcolor); 
-        const validatedBodyTypesIdBodyType = ModellValidator.validateId("bodytypes_idbodytype",bodytypes_idbodytype); 
-        const validatedFuelsIdFuel = ModellValidator.validateId("fuels_idfuel",fuels_idfuel);
-        const validatedLocationsIdlocations = ModellValidator.validateId("locations_idlocation",locations_idlocation); 
-        const validatedManufacturerTypeId = ModellValidator.validateId("manufacturer_type_id",manufacturer_type_id);
-
+        
         this.vin_number = vin_number;
         this.car_performance = car_performance; 
         this.engine_size = engine_size;
         this.licence_plate = licence_plate; 
         this.technical_validity = technical_validity; 
         this.production_time_idproduction_time = production_time_idproduction_time; 
-        this.colors_idcolor = validatedColorIdColor; 
-        this.bodytypes_idbodytype = validatedBodyTypesIdBodyType; 
-        this.fuels_idfuel = validatedFuelsIdFuel;
-        this.locations_idlocation = validatedLocationsIdlocations; 
-        this.manufacturer_type_id = validatedManufacturerTypeId;
+        this.colors_idcolor = colors_idcolor; 
+        this.bodytypes_idbodytype = bodytypes_idbodytype; 
+        this.fuels_idfuel = fuels_idfuel;
+        this.locations_idlocation = locations_idlocation; 
+        this.manufacturer_type_id = manufacturer_type_id;
 
     }
 
@@ -36,6 +25,15 @@ module.exports = class Car {
                     return row.length > 0 ? row : null;
             } catch (error) {
                 
+                    throw error;
+            }
+    }
+
+    static async getOneCar(idcar){
+            try {
+                const [row] = await db.query('SELECT * FROM vw_cars where idcar = ?',[idcar]);
+                    return row.length > 0 ? row[0] : null;
+            } catch (error) {
                     throw error;
             }
     }

@@ -63,12 +63,13 @@ class CarDataValidateMiddleware {
     }
     static async getLocationId(req,res,next) {
         const { location_name } = req.body;
-        const getLocationObject = await Location.getLocationIdByLocationName(location_name);
+        const getLocationObject = await Location.getLocationObjByLocationName(location_name);
         if(getLocationObject === null) {
             const error = new Error('There is no location with that id');
             error.statusCode = 404;
             return next(error);
         }
+
         req.idlocation = getLocationObject.idlocation;
         return next();
     }

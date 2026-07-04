@@ -3,15 +3,6 @@ const ModellValidator = require('../modellValidadator');
 
 module.exports = class User {
     constructor(given_name, family_name,pin_number, user_role, email, password,is_employed, addresses_idaddress, phone_number) {
-        ModellValidator.validateOneField("given_name",given_name); 
-        ModellValidator.validateOneField("family_name",family_name); 
-        ModellValidator.validateOneField("pin_number",pin_number); 
-        ModellValidator.validateOneField("user_role",user_role); 
-        ModellValidator.validateOneField("email",email);
-        ModellValidator.validateOneField("password",password);
-        ModellValidator.validateOneField("is_employed",is_employed);
-        const validatedIdaddress = ModellValidator.validateId("addresses_idaddress",addresses_idaddress);
-        ModellValidator.validateOneField("phone_number",phone_number);
 
         this.given_name = given_name; 
         this.family_name = family_name; 
@@ -20,16 +11,16 @@ module.exports = class User {
         this.email = email;
         this.password = password;
         this.is_employed = is_employed;
-        this.addresses_idaddress = validatedIdaddress;
+        this.addresses_idaddress = addresses_idaddress;
         this.phone_number = phone_number
     }
 
     /* User with both role */
 
     static async getOneUserAuthDataFromUsersById(iduser) {
-        const validatedIduser = ModellValidator.validateId("iduser",iduser);
+        
         try {
-            const [row] = await db.query('SELECT fired_at, is_employed, user_role FROM users where iduser = ?', [validatedIduser]);
+            const [row] = await db.query('SELECT fired_at, is_employed, user_role FROM users where iduser = ?', [iduser]);
             return row.length > 0 ? row[0] : null;
         } catch (error) {
             
@@ -39,9 +30,9 @@ module.exports = class User {
 
 
     static async getOneUserDataById(iduser){
-        const validatedIduser = ModellValidator.validateId("iduser",iduser);
+        
         try {
-            const [row] = await db.query('SELECT * FROM vw_user where iduser = ?', [validatedIduser]);
+            const [row] = await db.query('SELECT * FROM vw_user where iduser = ?', [iduser]);
             return row.length > 0 ? row[0] : null;
         } catch (error) {
             
@@ -50,7 +41,7 @@ module.exports = class User {
     }
 
     static async getIdAndPinNumberByPinNumber(pin_number){
-        ModellValidator.validateOneField("pin_number",pin_number);
+       
         try {
             const [row] = await db.query('SELECT iduser, pin_number FROM vw_user where pin_number = ?', [pin_number]);
             return row.length > 0 ? row[0] : null;
@@ -61,7 +52,7 @@ module.exports = class User {
     }
     /* A login-hez kell  */
     static async getOneUserByIncommingEmail(eMail) {
-        ModellValidator.validateOneField("email",eMail);
+        
         try {
             const [row] = await db.query(
             'SELECT * FROM users WHERE email = ? LIMIT 1',
@@ -95,9 +86,9 @@ module.exports = class User {
     }
 
     static async getOneEmployeeDataById(iduser){
-        const validatedIduser = ModellValidator.validateId("iduser",iduser)
+        
         try {
-            const [row] = await db.query('SELECT * FROM vw_employee where iduser = ?', [validatedIduser]);
+            const [row] = await db.query('SELECT * FROM vw_employee where iduser = ?', [iduser]);
             return row.length > 0 ? row[0] : null;
         } catch (error) {
             
@@ -116,10 +107,9 @@ module.exports = class User {
     }
 
     static async setEmployeeStatus(iduser,is_employed) {
-        ModellValidator.validateOneField("is_employed",is_employed);
-        const validatedIduser = ModellValidator.validateId("iduser",iduser)
+        
         try {
-            const [ result ] = await db.execute('UPDATE users SET is_employed = ? WHERE (iduser = ?);',[is_employed,validatedIduser]);
+            const [ result ] = await db.execute('UPDATE users SET is_employed = ? WHERE (iduser = ?);',[is_employed,iduser]);
             return result.insertId;
         } catch (error) {
             
@@ -130,7 +120,7 @@ module.exports = class User {
     /* Querries for checking data duplication of employee */
     
     static async getOneEmployeeIdByEmail(email){
-        ModellValidator.validateOneField("email",email);
+        
         try {
             const [row] = await db.query('SELECT iduser FROM vw_employee where email = ?', [email]);
             return row.length > 0 ? row[0].iduser : null;
@@ -141,7 +131,7 @@ module.exports = class User {
     }
 
     static async getOneEmployeeIdByPinNumber(pin_number){
-        ModellValidator.validateOneField("pin_number",pin_number);
+        
         try {
             const [row] = await db.query('SELECT iduser FROM vw_employee where pin_number = ?', [pin_number]);
             return row.length > 0 ? row[0].iduser : null;
@@ -152,7 +142,7 @@ module.exports = class User {
     }
     /* Duplázás, u.azt csinálja mint a getOneUserDataByEmail csak az employee táblábol szedi kérdéses, hogy nem e kódduplikálás */
     static async getOneEmployeeDataByEmail(email){
-        ModellValidator.validateOneField("email",email);
+        
         try {
             const [row] = await db.query('SELECT * FROM vw_employee where email = ?', [email]);
             return row.length > 0 ? row[0] : null;
@@ -185,9 +175,9 @@ module.exports = class User {
     }
 
     static async getOneCustomerDataById(iduser){
-        const validatedIduser = ModellValidator.validateId("iduser",iduser)
+        
         try {
-            const [row] = await db.query('SELECT * FROM vw_customer where iduser = ?', [validatedIduser]);
+            const [row] = await db.query('SELECT * FROM vw_customer where iduser = ?', [iduser]);
             return row.length > 0 ? row[0] : null;
         } catch (error) {
             
@@ -195,10 +185,10 @@ module.exports = class User {
         }
     }
     async updateCustomerData(iduser) {
-        const validatedIduser = ModellValidator.validateId("iduser",iduser)
+        
         try {
             const [ result ] = await db.execute('UPDATE users SET given_name = ?, family_name = ?, pin_number = ?, user_role = ?, email = ?, password = ?, is_employed = ?,addresses_idaddress = ?, phone_number = ? WHERE (iduser = ?);',
-                [this.given_name,this.family_name,this.pin_number,this.user_role,this.email,this.password,this.is_employed,this.addresses_idaddress,this.phone_number,validatedIduser]);
+                [this.given_name,this.family_name,this.pin_number,this.user_role,this.email,this.password,this.is_employed,this.addresses_idaddress,this.phone_number,iduser]);
             return result.insertId;
         } catch (error) {
             
@@ -208,7 +198,7 @@ module.exports = class User {
     /* Validációs lekérdezések a usernek*/
 
     static async getOneUserDataByPinNumber(pin_number){
-        ModellValidator.validateOneField("pin_number",pin_number);
+        
         try {
             const [row] = await db.query('SELECT iduser,pin_number FROM vw_user where pin_number = ?', [pin_number]);
             return row.length > 0 ? row[0] : null;

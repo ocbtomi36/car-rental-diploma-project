@@ -4,19 +4,20 @@ const TypeService = require('./typeService');
 
 module.exports = class ManufacturerTypeService {
 
-    static async insertManufacturerType(manufacturer, type){
+    static async insertManufacturerType(type,manufacturer){
         const fkManufacturer = await ManufacturerService.insertManufacturer(manufacturer);
         const fkType = await TypeService.insertType(type);
-        const getManufacturerType = await ManufacturerTypeModell.getManufacturersTypesByIds(fkManufacturer,fkType);
+        const getManufacturerType = await ManufacturerTypeModell.getManufacturersTypesByIds(fkType,fkManufacturer);
         try{
             if(getManufacturerType !== null){
                 return getManufacturerType.idmanufacturer_types;
             } else {
-            const insertManufacturerType = new ManufacturerTypeModell(fkManufacturer, fkType);
+            const insertManufacturerType = new ManufacturerTypeModell(fkType,fkManufacturer);
             return await insertManufacturerType.saveManufacturerTypes();
             }
         } catch (error) {
             throw error;
         }
+            
     }
 }
