@@ -40,7 +40,7 @@ CREATE TABLE `addresses` (
   CONSTRAINT `fk_addresses_street_types1` FOREIGN KEY (`street_types_idstreet_type`) REFERENCES `street_types` (`idstreet_type`),
   CONSTRAINT `ck_postal_code_format` CHECK (regexp_like(`postal_code`,_utf8mb4'^[0-9]{4}$')),
   CONSTRAINT `ck_postal_code_len` CHECK ((char_length(`postal_code`) = 4))
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,7 +49,7 @@ CREATE TABLE `addresses` (
 
 LOCK TABLES `addresses` WRITE;
 /*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
-INSERT INTO `addresses` VALUES (7,'1048','Json','34',1,1),(1,'1048','Nádasdy','32',1,1),(6,'3300','Dobó István','11',2,1),(3,'3321','Fő','1',1,1),(4,'3321','Fő','1',3,2);
+INSERT INTO `addresses` VALUES (7,'1048','Json','34',1,1),(1,'1048','Nádasdy','32',1,1),(14,'1051','Kossuth Lajos','12A',1,1),(9,'1111','Kossuth','12',1,1),(11,'1111','Nadas','34',1,3),(16,'1111','sdfsdafsdafasfsd','33',1,1),(13,'1234','Van','22',1,1),(10,'1234','Van','33',1,1),(12,'1234','Van','44',1,1),(6,'3300','Dobó István','11',2,1),(3,'3321','Fő','1',1,1),(4,'3321','Fő','1',3,2),(15,'4444','Van','22',1,1);
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -211,10 +211,10 @@ CREATE TABLE `cars` (
   CONSTRAINT `fk_cars_production_time1` FOREIGN KEY (`production_time_idproduction_time`) REFERENCES `production_time` (`idproduction_time`),
   CONSTRAINT `fk_manufacturer_type` FOREIGN KEY (`manufacturer_type_id`) REFERENCES `manufacturer_types` (`idmanufacturer_types`),
   CONSTRAINT `ch_car_perf` CHECK (((`car_performance` >= 20) and (`car_performance` <= 1200))),
-  CONSTRAINT `ch_reg_licence_plate` CHECK ((regexp_like(`licence_plate`,_utf8mb4'^([A-Z]{3}[0-9]{3}|[A-Z]{2}[A-Z]{2}[0-9]{3})$') or (`licence_plate` is null))),
+  CONSTRAINT `ch_reg_licence_plate` CHECK (((`licence_plate` is null) or regexp_like(`licence_plate`,_utf8mb4'^[A-Z0-9 -]{2,15}$'))),
   CONSTRAINT `ch_status` CHECK ((`status` in (_utf8mb4'available',_utf8mb4'rented',_utf8mb4'inservice',_utf8mb4'sold',_utf8mb4'suspended'))),
   CONSTRAINT `ck_engine_size` CHECK (((`engine_size` >= 250) and (`engine_size` <= 10000)))
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -223,7 +223,7 @@ CREATE TABLE `cars` (
 
 LOCK TABLES `cars` WRITE;
 /*!40000 ALTER TABLE `cars` DISABLE KEYS */;
-INSERT INTO `cars` VALUES (18,'1HGCM82633A004361',100,1000,'AAA111','2010-01-01','sold','2026-04-28 09:47:16','2026-04-28 09:48:30',8,3,3,3,6,7),(19,'WVWZZZ1JZXW000001',150,1998,'MAB123','2027-05-31','rented','2026-05-01 11:00:21','2026-05-03 09:21:28',9,4,4,3,6,8),(20,'VVWZZZ1JZXW000001',150,1998,'MAB124','2027-05-15','available','2026-05-01 11:01:02','2026-05-01 11:01:02',9,4,4,3,6,8);
+INSERT INTO `cars` VALUES (18,'1HGCM82633A004361',100,1000,'AAA111','2010-01-01','sold','2026-04-28 09:47:16','2026-04-28 09:48:30',8,3,3,3,6,7),(19,'WVWZZZ1JZXW000001',150,1998,'MAB123','2027-05-31','rented','2026-05-01 11:00:21','2026-05-03 09:21:28',9,4,4,3,6,8),(20,'VVWZZZ1JZXW000001',150,1998,'MAB124','2027-07-03','available','2026-05-01 11:01:02','2026-07-03 13:30:51',12,4,4,3,6,18),(21,'VVTZZZ1JZXW000001',150,1998,'MAB127','2027-07-05','available','2026-07-03 15:31:47','2026-07-03 15:31:47',10,4,4,3,6,17),(23,'TTTZZZ1JZXW000001',150,1998,'MAK124','2027-07-05','available','2026-07-04 09:11:19','2026-07-07 11:38:48',10,4,4,3,6,17),(24,'CCCZZZ1JZXW000001',150,1998,'MAI124','2027-07-05','available','2026-07-07 11:42:20','2026-07-07 11:42:20',10,4,4,3,6,17),(25,'ZZZZZZ1JZXW000001',150,1998,'MKK124','2027-07-05','available','2026-07-07 11:42:38','2026-07-07 11:43:12',10,4,4,3,6,17);
 /*!40000 ALTER TABLE `cars` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -535,7 +535,7 @@ CREATE TABLE `manufacturer_types` (
   KEY `fk_manufacturer_types_manufacturers1_idx` (`manufacturers_idmanufacturer`),
   CONSTRAINT `fk_manufacturer_types_manufacturers1` FOREIGN KEY (`manufacturers_idmanufacturer`) REFERENCES `manufacturers` (`idmanufacturer`),
   CONSTRAINT `fk_manufacturer_types_types1` FOREIGN KEY (`types_idtype`) REFERENCES `types` (`idtype`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -544,7 +544,7 @@ CREATE TABLE `manufacturer_types` (
 
 LOCK TABLES `manufacturer_types` WRITE;
 /*!40000 ALTER TABLE `manufacturer_types` DISABLE KEYS */;
-INSERT INTO `manufacturer_types` VALUES (7,3,3),(8,4,4);
+INSERT INTO `manufacturer_types` VALUES (7,3,3),(8,4,4),(16,4,5),(17,5,6),(18,6,3),(19,7,5),(21,8,6),(20,8,7);
 /*!40000 ALTER TABLE `manufacturer_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -561,7 +561,7 @@ CREATE TABLE `manufacturers` (
   PRIMARY KEY (`idmanufacturer`),
   UNIQUE KEY `idmanufacturer_UNIQUE` (`idmanufacturer`),
   UNIQUE KEY `manufacturer_UNIQUE` (`manufacturer`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -570,7 +570,7 @@ CREATE TABLE `manufacturers` (
 
 LOCK TABLES `manufacturers` WRITE;
 /*!40000 ALTER TABLE `manufacturers` DISABLE KEYS */;
-INSERT INTO `manufacturers` VALUES (4,'BMW'),(3,'Mazda');
+INSERT INTO `manufacturers` VALUES (4,'BMW'),(6,'Ford'),(3,'Mazda'),(7,'Mercedes'),(5,'Toyota');
 /*!40000 ALTER TABLE `manufacturers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -628,7 +628,7 @@ CREATE TABLE `production_time` (
   UNIQUE KEY `idproduction_time_UNIQUE` (`idproduction_time`),
   UNIQUE KEY `production_time_UNIQUE` (`production_time`),
   CONSTRAINT `ck_production_time` CHECK ((`production_time` > _utf8mb4'1949-12-31'))
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -637,7 +637,7 @@ CREATE TABLE `production_time` (
 
 LOCK TABLES `production_time` WRITE;
 /*!40000 ALTER TABLE `production_time` DISABLE KEYS */;
-INSERT INTO `production_time` VALUES (9,'1990-02-02'),(8,'1998-01-01');
+INSERT INTO `production_time` VALUES (12,'1970-01-31'),(11,'1970-02-01'),(10,'1970-02-02'),(9,'1990-02-02'),(8,'1998-01-01');
 /*!40000 ALTER TABLE `production_time` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -671,7 +671,7 @@ CREATE TABLE `street_types` (
   `street_type` varchar(45) NOT NULL,
   PRIMARY KEY (`idstreet_type`),
   UNIQUE KEY `street_type_UNIQUE` (`street_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -680,7 +680,7 @@ CREATE TABLE `street_types` (
 
 LOCK TABLES `street_types` WRITE;
 /*!40000 ALTER TABLE `street_types` DISABLE KEYS */;
-INSERT INTO `street_types` VALUES (2,'Köz'),(1,'utca');
+INSERT INTO `street_types` VALUES (2,'Köz'),(3,'tér'),(1,'utca');
 /*!40000 ALTER TABLE `street_types` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -752,7 +752,6 @@ CREATE TABLE `transactions` (
 
 LOCK TABLES `transactions` WRITE;
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-INSERT INTO `transactions` VALUES (1,'sold','2026-04-28 09:48:30',1,18),(4,'sold','2026-05-03 00:05:27',6,19),(6,'buyback','2026-05-03 00:20:51',6,19),(7,'inservice','2026-05-03 08:40:35',6,19),(8,'service-back','2026-05-03 08:40:53',6,19),(9,'rent','2026-05-03 09:21:28',6,19);
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -875,7 +874,7 @@ CREATE TABLE `types` (
   PRIMARY KEY (`idtype`),
   UNIQUE KEY `idtype_UNIQUE` (`idtype`),
   UNIQUE KEY `type_UNIQUE` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -884,7 +883,7 @@ CREATE TABLE `types` (
 
 LOCK TABLES `types` WRITE;
 /*!40000 ALTER TABLE `types` DISABLE KEYS */;
-INSERT INTO `types` VALUES (3,'Mx'),(4,'X5');
+INSERT INTO `types` VALUES (8,'Benz'),(7,'Corolla'),(5,'Focus'),(3,'Mx'),(6,'Mx3'),(4,'X5');
 /*!40000 ALTER TABLE `types` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -963,7 +962,7 @@ CREATE TABLE `users` (
   CONSTRAINT `ck_phone_number_length` CHECK ((length(`phone_number`) between 10 and 16)),
   CONSTRAINT `ck_pin_number_format` CHECK (regexp_like(`pin_number`,_utf8mb4'^[A-Z]{2}[0-9]{6}$')),
   CONSTRAINT `ck_user_role` CHECK ((`user_role` in (_utf8mb4'admin',_utf8mb4'manager',_utf8mb4'employee',_utf8mb4'customer')))
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -972,7 +971,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'From json Insert','Signup','PP111121','admin','bal@bal.hu','sélfkjsdaflksadjfélsak','2026-03-21 20:41:22','2026-04-16 20:34:36',NULL,'yes',1,'06303645122'),(3,'Nagy','Béla','BC123456','admin','tamas.lecza@example.com','$2b$13$c9LUt4O/a.vQoS8yJe8RaO4.WGq2ANa/iGye0nxXmomcs7Hgr9hba','2026-03-24 09:25:38','2026-03-24 09:25:38',NULL,'yes',6,'0612301392'),(4,'From json','Signup','PP111112','customer',NULL,NULL,'2026-03-24 10:05:03','2026-04-16 13:11:29',NULL,NULL,1,'06303645122'),(6,'d','Béla','BD123457','manager','customer@example.com','$2b$13$VnOMSQ5eJHAPExqFdScCQO1f1uCn.wXp4oIL24/nxmuyG6T/05ZMO','2026-03-24 12:37:22','2026-03-24 12:37:22',NULL,'yes',6,'0612301394'),(7,'Updated Beszur','Customer','BD123410','customer',NULL,NULL,'2026-03-29 09:17:59','2026-04-01 16:12:47',NULL,NULL,6,'0612301394'),(8,'Trigger ','Update','BA222222','employee','triger@trigger.com','nincs','2026-04-07 22:04:40','2026-04-07 22:37:16',NULL,'yes',1,'06303655122'),(9,'Insert ','Before Trigger','AA111111','customer',NULL,NULL,'2026-04-07 22:17:00','2026-04-07 22:17:00',NULL,NULL,1,'36301111111'),(10,'Insert triger','teszt','SS111111','employee','tesztinsertbeforetr@teszt.hu','yella','2026-04-07 22:39:43','2026-04-07 22:39:43',NULL,'yes',1,'11111111111111'),(11,'asdfasdfasd','asdfsadfasd','BB222222','customer',NULL,NULL,'2026-04-08 11:47:23','2026-04-08 11:47:23',NULL,NULL,1,'2301321111111'),(14,'From json','Signup','PP111111','manager','insert@valami.com','$2b$13$hkuwTo4R7r4kCfh1KqyfuOblOa/WxVxguJgBkcxj1FsEjii3Er56a','2026-04-09 09:51:30','2026-04-16 11:46:50',NULL,'yes',1,'06303645122'),(17,'From json Insert','Signup','PP111114','customer',NULL,NULL,'2026-04-16 13:21:42','2026-04-16 13:21:42',NULL,NULL,1,'06303645122'),(18,'From json Insert','Signup','PP111115','customer',NULL,NULL,'2026-04-16 13:35:06','2026-04-16 13:35:06',NULL,NULL,1,'06303645122'),(19,'From json Insert','Signup','PP111120','admin','vali@vali.com','$2b$13$IvMMXepjbkTuOpg1N9W35ubNFye2PB2Cl4xCsHbLF/ui7VAUFpjGm','2026-04-16 13:37:12','2026-04-16 13:37:12',NULL,'yes',1,'06303645122'),(20,'Login','Béla','PP111141','admin','login@login.hu','$2b$13$qjoEKCSYDG6GMhIq.p7IIeKDZRlNbfWxNnMHYYkM2OuWyMhiJP/P6','2026-04-16 20:09:02','2026-04-16 20:12:12',NULL,'yes',1,'06303645122');
+INSERT INTO `users` VALUES (22,'Tamáska','Lecza','BA123456','admin','teszt@teszt.com','$2b$13$JqvmoSFUr4CNg4Bm9MOIRODG0AZtN/9e0ooJ60.CW23FkH9.WKmT2','2026-06-22 15:41:13','2026-07-01 09:46:09',NULL,'yes',9,'+36301234567'),(23,'React3','Frontend','BB111111','admin','van@van.hu','$2b$13$iHXZpEtgb4qaxV7Bue1vf.6kj5kdqq7Mf/0Rj3jVPUlmkLPCDRg22','2026-06-26 08:18:31','2026-06-26 12:54:03',NULL,'yes',12,'+36301234567'),(24,'React','Leveskeke','BB111112','admin','lskjflk@flskdf.hu','$2b$13$6gwCre417UOuO0Lz6uyyFOLwdD2tW1VfV4yLFfyDWN5ooUy1PKQ/C','2026-06-26 11:12:25','2026-06-27 08:18:08','2026-06-27 08:18:08','no',11,'06302222222'),(25,'Teszt','User','CC123456','customer',NULL,NULL,'2026-06-28 09:39:46','2026-07-01 09:33:04',NULL,NULL,1,'06303445522'),(26,'Kovács','János','CC345678','customer',NULL,NULL,'2026-07-01 08:58:24','2026-07-01 09:44:30',NULL,NULL,14,'+36301234567'),(27,'React','Frontend','BB111113','customer',NULL,NULL,'2026-07-01 09:27:27','2026-07-01 09:27:27',NULL,NULL,13,'06302222222'),(28,'Babb','Leveskeke','BB111114','customer',NULL,NULL,'2026-07-01 09:30:13','2026-07-01 09:30:13',NULL,NULL,15,'06302222222'),(29,'Kovács','János','CD345678','customer',NULL,NULL,'2026-07-01 09:31:22','2026-07-01 09:31:22',NULL,NULL,14,'+36301234567'),(30,'Gyuláné','Frontend','BB111118','customer',NULL,NULL,'2026-07-01 09:45:15','2026-07-01 09:45:15',NULL,NULL,16,'06302222222');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -1102,12 +1101,12 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `given_name`,
  1 AS `family_name`,
  1 AS `pin_number`,
- 1 AS `user_role`,
+ 1 AS `phone_number`,
  1 AS `postal_code`,
- 1 AS `locality_name`,
  1 AS `street_name`,
- 1 AS `street_type`,
- 1 AS `house_number`*/;
+ 1 AS `house_number`,
+ 1 AS `locality_name`,
+ 1 AS `street_type`*/;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -1126,11 +1125,12 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `user_role`,
  1 AS `email`,
  1 AS `is_employed`,
+ 1 AS `phone_number`,
  1 AS `postal_code`,
- 1 AS `locality_name`,
  1 AS `street_name`,
- 1 AS `street_type`,
- 1 AS `house_number`*/;
+ 1 AS `house_number`,
+ 1 AS `locality_name`,
+ 1 AS `street_type`*/;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -1204,14 +1204,6 @@ SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = @saved_cs_client;
 
 --
--- Dumping events for database 'new_finaldbrentcar'
---
-
---
--- Dumping routines for database 'new_finaldbrentcar'
---
-
---
 -- Final view structure for view `vw_cars`
 --
 
@@ -1242,7 +1234,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `vw_customer` AS select `users`.`iduser` AS `iduser`,`users`.`given_name` AS `given_name`,`users`.`family_name` AS `family_name`,`users`.`pin_number` AS `pin_number`,`users`.`user_role` AS `user_role`,`addresses`.`postal_code` AS `postal_code`,`locality_names`.`locality_name` AS `locality_name`,`addresses`.`street_name` AS `street_name`,`street_types`.`street_type` AS `street_type`,`addresses`.`house_number` AS `house_number` from (((`users` join `addresses` on((`users`.`addresses_idaddress` = `addresses`.`idaddress`))) join `locality_names` on((`addresses`.`locality_names_idlocality_name` = `locality_names`.`idlocality_name`))) join `street_types` on((`addresses`.`street_types_idstreet_type` = `street_types`.`idstreet_type`))) where (`users`.`user_role` = 'customer') */;
+/*!50001 VIEW `vw_customer` AS select `users`.`iduser` AS `iduser`,`users`.`given_name` AS `given_name`,`users`.`family_name` AS `family_name`,`users`.`pin_number` AS `pin_number`,`users`.`phone_number` AS `phone_number`,`addresses`.`postal_code` AS `postal_code`,`addresses`.`street_name` AS `street_name`,`addresses`.`house_number` AS `house_number`,`locality_names`.`locality_name` AS `locality_name`,`street_types`.`street_type` AS `street_type` from (((`users` join `addresses` on((`users`.`addresses_idaddress` = `addresses`.`idaddress`))) join `locality_names` on((`addresses`.`locality_names_idlocality_name` = `locality_names`.`idlocality_name`))) join `street_types` on((`addresses`.`street_types_idstreet_type` = `street_types`.`idstreet_type`))) where (`users`.`user_role` = 'customer') */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -1260,7 +1252,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `vw_employee` AS select `users`.`iduser` AS `iduser`,`users`.`given_name` AS `given_name`,`users`.`family_name` AS `family_name`,`users`.`pin_number` AS `pin_number`,`users`.`user_role` AS `user_role`,`users`.`email` AS `email`,`users`.`is_employed` AS `is_employed`,`addresses`.`postal_code` AS `postal_code`,`locality_names`.`locality_name` AS `locality_name`,`addresses`.`street_name` AS `street_name`,`street_types`.`street_type` AS `street_type`,`addresses`.`house_number` AS `house_number` from (((`users` join `addresses` on((`users`.`addresses_idaddress` = `addresses`.`idaddress`))) join `locality_names` on((`addresses`.`locality_names_idlocality_name` = `locality_names`.`idlocality_name`))) join `street_types` on((`addresses`.`street_types_idstreet_type` = `street_types`.`idstreet_type`))) where (`users`.`user_role` <> 'customer') */;
+/*!50001 VIEW `vw_employee` AS select `users`.`iduser` AS `iduser`,`users`.`given_name` AS `given_name`,`users`.`family_name` AS `family_name`,`users`.`pin_number` AS `pin_number`,`users`.`user_role` AS `user_role`,`users`.`email` AS `email`,`users`.`is_employed` AS `is_employed`,`users`.`phone_number` AS `phone_number`,`addresses`.`postal_code` AS `postal_code`,`addresses`.`street_name` AS `street_name`,`addresses`.`house_number` AS `house_number`,`locality_names`.`locality_name` AS `locality_name`,`street_types`.`street_type` AS `street_type` from (((`users` join `addresses` on((`users`.`addresses_idaddress` = `addresses`.`idaddress`))) join `locality_names` on((`addresses`.`locality_names_idlocality_name` = `locality_names`.`idlocality_name`))) join `street_types` on((`street_types`.`idstreet_type` = `addresses`.`street_types_idstreet_type`))) where (`users`.`user_role` <> 'customer') */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -1346,4 +1338,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-05-10 11:27:11
+-- Dump completed on 2026-07-07 14:00:16
