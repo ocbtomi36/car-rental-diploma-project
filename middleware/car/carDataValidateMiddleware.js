@@ -66,7 +66,7 @@ class CarDataValidateMiddleware {
         const getLocationObject = await Location.getLocationObjByLocationName(location_name);
         if(getLocationObject === null) {
             const error = new Error('There is no location with that id');
-            error.statusCode = 404;
+            error.statusCode = 409;
             return next(error);
         }
 
@@ -74,6 +74,17 @@ class CarDataValidateMiddleware {
         return next();
     }
 
-
+    static validateLicencePlate(req,res,next) {
+        let { licence_plate } = req.body;
+        const regex = /^([A-Z0-9 -]{2,15})$/
+        if(licence_plate !== null) {
+            if(!regex.test(licence_plate.trim())){
+             const error = new Error('Wrong licence plate format');
+             error.statusCode = 400;
+             return next(error);
+            }
+        }
+       next();
+    }
 }
 module.exports = CarDataValidateMiddleware;

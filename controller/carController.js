@@ -70,10 +70,6 @@ exports.insertCar = async (req,res,next) => {
     }
     const { vin_number, car_performance, engine_size, licence_plate, technical_validity, production_time, color, bodytype, fuel, manufacturer, type } = req.body;
     try {
-        let validateLicencePlate = licence_plate;
-        if(validateLicencePlate === undefined) {
-            validateLicencePlate = null;
-        }
         const idlocation = req.idlocation;
         const production_time_idproduction_time = await ProductionTimeService.insertProductionTime(production_time);
         const colors_idcolor = await ColorService.insertColor(color);
@@ -87,14 +83,8 @@ exports.insertCar = async (req,res,next) => {
         return next(error);
     }
 }
-/* Ezt átnézni */
+
 exports.updateCar = async (req,res,next) => {
-    
-    if(req.user_role === 'customer') {
-        const error = new Error('Access denied');
-        error.statusCode = 403;
-        return next(error);
-    }
     
     const { vin_number, car_performance, engine_size, licence_plate, technical_validity, production_time, color, bodytype, fuel, manufacturer, type, idLocation } = req.body;
     const { carsId } = req.params;
@@ -102,32 +92,34 @@ exports.updateCar = async (req,res,next) => {
     const carObjDb = req.carDb;
     const dbVinNumber = carObjDb.vin_number;
     const validateVinNumber = vin_number;
+    let validateLicencePlate = licence_plate;
     try{
+        if(req.user_role === 'customer') {
+            const error = new Error('Access denied');
+            error.statusCode = 403;
+            return next(error);
+        }
         if(dbVinNumber !== validateVinNumber) {
             const getCarObj = await CarModell.getCarByVinNumber(validateVinNumber);
-            if(getCarObj.idcar !== null) {
+            if(getCarObj !== null) {
                 const error = new Error('Vin Number is already exist');
                 error.statusCode = 409;
                 return next(error);
             }
         }
-        const dbLicencePlate = carObjDb.licence_plate;
-        const validateLicencePlate = licence_plate;
-        if(validateLicencePlate === undefined) {
-            validateLicencePlate = null;
-        } else {
+        if(validateLicencePlate !== null) {
+            const dbLicencePlate = carObjDb.licence_plate;
             if(dbLicencePlate !== validateLicencePlate){
                 const getCarObj = await CarModell.getCarByLicencePlate(validateLicencePlate);
-                if(getCarObj.idcar !== null) {
-                    const error = new Error('Licence Plate is already exist');
-                    error.statusCode = 409;
-                    return next(error);
-                }
+                    if(getCarObj !== null) {
+                        const error = new Error('Licence Plate is already exist');
+                        error.statusCode = 409;
+                        return next(error);
+                    }
             }
-        }
+        } 
         const production_time_idproduction_time = await ProductionTimeService.insertProductionTime(production_time);
         const manufacturer_types_idmanufacturer_types = await ManufacturerTypeService.insertManufacturerType(type,manufacturer); 
-        console.log(manufacturer_types_idmanufacturer_types);
         const colors_idcolor = await ColorService.insertColor(color);
         const bodytypes_idbodytype = await BodyTypeService.insertBodyType(bodytype);
         const fuels_idfuel = await FuelService.insertFuel(fuel);
@@ -139,13 +131,3 @@ exports.updateCar = async (req,res,next) => {
         return next(error);
     }
 }
-
-
-/*
-        
-        
-        
-        
-
-*/
-   
