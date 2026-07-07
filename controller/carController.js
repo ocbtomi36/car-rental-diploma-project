@@ -76,7 +76,7 @@ exports.insertCar = async (req,res,next) => {
         const bodytypes_idbodytype = await BodyTypeService.insertBodyType(bodytype);
         const fuels_idfuel = await FuelService.insertFuel(fuel);
         const manufacturer_types_idmanufacturer_types = await ManufacturerTypeService.insertManufacturerType(type,manufacturer);
-        const insertCar = new CarModell(vin_number, car_performance, engine_size, validateLicencePlate, technical_validity, production_time_idproduction_time, colors_idcolor, bodytypes_idbodytype, fuels_idfuel,idlocation, manufacturer_types_idmanufacturer_types);
+        const insertCar = new CarModell(vin_number, car_performance, engine_size, licence_plate, technical_validity, production_time_idproduction_time, colors_idcolor, bodytypes_idbodytype, fuels_idfuel,idlocation, manufacturer_types_idmanufacturer_types);
         const id = await insertCar.saveCar();
         return res.status(201).json({ message: "Car inserted successfully", carId: id});
         } catch (error) {
