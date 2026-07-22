@@ -18,6 +18,6 @@ router.get('/cars/sold',authChain,CarDataValidateMiddleware.setCarStatus('sold')
 router.get('/cars/suspended',authChain,CarDataValidateMiddleware.setCarStatus('suspended'),carController.getAllCarsByStatus);
 
 router.post('/car',authChain,validateAllowedFields(insertUpdateCarDatas),[carValidator],incommingDataResult, CarDataValidateMiddleware.validateLicencePlate, CarDataValidateMiddleware.checkLicencePlate,CarDataValidateMiddleware.checkVinNumber,CarDataValidateMiddleware.getLocationId,carController.insertCar)
-router.put('/car/:carsId',authChain,validateAllowedFields(insertUpdateCarDatas),[carValidator],incommingDataResult,CarDataValidateMiddleware.validateLicencePlate,CarDataValidateMiddleware.getLocationId,CarDataValidateMiddleware.checkCarId,carController.updateCar);
+router.put('/car/:carsId',authChain,validateAllowedFields(insertUpdateCarDatas),[carValidator],incommingDataResult,CarDataValidateMiddleware.validateLicencePlate,incommingDataResult,CarDataValidateMiddleware.getLocationId,CarDataValidateMiddleware.checkCarId,carController.updateCar);
 
 module.exports = router;

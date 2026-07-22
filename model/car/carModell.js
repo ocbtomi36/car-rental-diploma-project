@@ -63,9 +63,9 @@ module.exports = class Car {
 
     async updateCar(carId){
         try {
-            console.log(carId)
             const [result] = await db.execute('UPDATE cars SET vin_number = ? , car_performance = ?, engine_size = ?, licence_plate = ?, technical_validity = ?, production_time_idproduction_time = ?, colors_idcolor = ?, bodytypes_idbodytype = ?, fuels_idfuel = ?, locations_idlocation = ?, manufacturer_type_id = ? WHERE (idcar = ?);', [this.vin_number,this.car_performance,this.engine_size,this.licence_plate,this.technical_validity,this.production_time_idproduction_time,this.colors_idcolor,this.bodytypes_idbodytype,this.fuels_idfuel,this.locations_idlocation,this.manufacturer_type_id,carId]);
         } catch (error) {
+            console.log(error)
             throw error;
         }
     }

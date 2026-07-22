@@ -9,7 +9,6 @@ const validateAllowedFields = (allowedFields) => {
       error.data = extraFields;
       return next(error);
     }
-
     next();
   };
 };

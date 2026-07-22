@@ -124,6 +124,7 @@ exports.updateCar = async (req,res,next) => {
         const bodytypes_idbodytype = await BodyTypeService.insertBodyType(bodytype);
         const fuels_idfuel = await FuelService.insertFuel(fuel);
         const updateCar = new CarModell(validateVinNumber, car_performance, engine_size, validateLicencePlate, technical_validity, production_time_idproduction_time, colors_idcolor, bodytypes_idbodytype, fuels_idfuel,idlocation, manufacturer_types_idmanufacturer_types);
+        console.log('itt')
         await updateCar.updateCar(carsId);
         return res.status(201).json({ message: "Car updated successfully"});
        
