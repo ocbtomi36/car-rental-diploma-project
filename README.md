@@ -24,8 +24,14 @@ This is an independently developed project.
     - CRUD operations
 
 ## 5. How to install 
-A felhasználóknak lehetőséget kell biztosítani a rendezvényekre való jegyfoglalásra.
-A foglalásoknak tartalmazniuk kell a felhasználó nevét és a rendezvény adatait.
+
+### 5.1 Download the project
+
+    ```bash
+    npm install
+    npm start
+    ```
+
 
 ## 6. Neccecary Environment Variables
 Az adminisztrátoroknak lehetőséget kell biztosítani új felhasználók hozzáadására, meglévő felhasználók módosítására és törlésére.
