@@ -10,11 +10,11 @@
 
 ## 2. Used Technologies
 
- Node.js
- Express.js
- MySQL
- JWT
- Git
+ * **Node.js
+  Express.js
+  MySQL
+  JWT
+  Git
 
 ## 3. Contributors
 
