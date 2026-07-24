@@ -41,7 +41,9 @@ This is an independently developed project.
 
 ```bash
 HTTPS: https://github.com/ocbtomi36/car-rental-diploma-project.git 
-or
+```
+or 
+```bash
 GitHub_CLI: gh repo clone ocbtomi36/car-rental-diploma-project
 ```
 
