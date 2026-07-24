@@ -77,8 +77,8 @@ Go to your project terminal and run command:
 ```
 3. To log in as admin use this username and password:
 
-Username: 
-Password: 
+Username: teszt@teszt.com
+Password: malacka
 
 
 ## 7.License
