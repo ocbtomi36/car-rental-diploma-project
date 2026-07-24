@@ -3,7 +3,7 @@
 
 ## 1. About the project
 
-This is a node.js and express based REST API that sereves as the backend for a vehicle management system.
+This is a node.js and express based REST API that serves as the backend for a vehicle management system.
 
 ---
 
@@ -24,9 +24,9 @@ This is an independently developed project.
 
  * User authentication with login and registration
  * Role-based authentication for protected API routes
- * CRUD operations for each objects
+ * CRUD operations for each entity
 
-## 5. Neccecary Environment Variables
+## 5. Necessary Environment Variables
     PORT
     HOST    
     USER
@@ -75,10 +75,18 @@ Go to your project terminal and run command:
 ```bash
     npm start
 ```
-3. To log in as admin use this username and password:
+
+For this demo project, a predefined JWT secret is used to simplify local setup.
+
+In a production environment, the JWT secret must be stored securely and should not be shared.
+
+3. Set this ` newsomesupersecretsecret ` as jwt_password.
+
+4. To log in as admin use this username and password:
 
 Username: teszt@teszt.com
 Password: malacka
+
 
 
 ## 7.License
