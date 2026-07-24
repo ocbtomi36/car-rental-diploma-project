@@ -26,16 +26,24 @@ This is an independently developed project.
  * Role-based authentication for protected API routes
  * CRUD operations for each objects
 
-## 5. Getting Started 
+## 5. Neccecary Environment Variables
+    PORT
+    HOST    
+    USER
+    PASSWORD
+    DATABASE
+    JWT_PASSWORD
 
-### 5.1 Prerequisites
+## 6. Getting Started 
+
+### 6.1 Prerequisites
 
  * Node.js version 17 or higher
  * MySQL Server 8.0+ or MariaDB 10.5+
  * MySQL Workbench 8.0 CE (recommended graphical client)
  * Git or another Git-compatible version control tool
 
-### 5.2 How to get the project
+### 6.2 How to get the project
 
 1. Clone the repository on your local machine
 
@@ -56,24 +64,21 @@ With that command you install all necessary packages.
 
 3. Import `.sql ` file from `db_dump` folder into supported DBMS.
 
-### 5.3 Start the project
+### 6.3 Start the project
+
+1. Create an ` .env ` file and use the variables names. List you can find section 5.
+
+2. To run the program
+
+Go to your project terminal and run command:
 
 ```bash
     npm start
 ```
+3. To log in as admin use this username and password:
 
-## 6. Neccecary Environment Variables
+Username: 
+Password: 
 
-    PORT
-    HOST    
-    USER
-    PASSWORD
-    DATABASE
-    JWT_PASSWORD
 
-## 7. Database
-Az alkalmazásnak intuitív és felhasználóbarát felhasználói felülettel kell rendelkeznie.
-A felhasználóknak könnyen hozzáférhető navigációs rendszerrel kell rendelkezniük a funkciókhoz és menükhöz.
-
-## 8. Authentacion 
 
