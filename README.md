@@ -28,7 +28,7 @@ This is an independently developed project.
 
 ## 5. Getting Started 
 
-### 5.1 Must have on your computer
+### 5.1 Prerequisites
 
  * Node.js version 17 or higher
  * MySQL Server 8.0+ or MariaDB 10.5+
@@ -37,7 +37,7 @@ This is an independently developed project.
 
 ### 5.2 How to get the project
 
-1. Clone the repository on your local maschine
+1. Clone the repository on your local machine
 
 ```bash
 HTTPS: https://github.com/ocbtomi36/car-rental-diploma-project.git 
@@ -47,13 +47,20 @@ or
 GitHub_CLI: gh repo clone ocbtomi36/car-rental-diploma-project
 ```
 
-2. On Your computer: 
+2. Open the project terminal and run: 
+
+```bash
     npm install
-3. Import .sql file from db_dump folder to Mysql workbench DBMS.
+```
+With that command you install all necessary packages.
+
+3. Import `.sql ` file from `db_dump` folder into supported DBMS.
 
 ### 5.3 Start the project
 
-type npm start
+```bash
+    npm start
+```
 
 ## 6. Neccecary Environment Variables
 
