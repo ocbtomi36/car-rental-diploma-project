@@ -1,0 +1,19 @@
+[1mdiff --git a/README.md b/README.md[m
+[1mindex 6aa224d..4b121f6 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -26,14 +26,6 @@[m [mThis is an independently developed project.[m
+  * Role-based authentication for protected API routes[m
+  * CRUD operations for each entity[m
+ [m
+[31m-## 5. Necessary Environment Variables[m
+[31m-    PORT[m
+[31m-    HOST    [m
+[31m-    USER[m
+[31m-    PASSWORD[m
+[31m-    DATABASE[m
+[31m-    JWT_PASSWORD[m
+[31m-[m
+ ## 6. Getting Started [m
+ [m
+ ### 6.1 Prerequisites[m
