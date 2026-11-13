@@ -1,7 +1,7 @@
 const { body } = require('express-validator');
 
     const employeeJsonValidate = [
-        body('given_name').trim().isLength({min:1,max:50}).withMessage('length of given name is incorrect'),
+        body('given_name').trim().isLength({min:0,max:50}).withMessage('length of given name is incorrect'),
         body('family_name').trim().isLength({min:1,max:50}).withMessage('length of family name is incorrect'),
         body('pin_number').trim().isLength({min:8,max:8}).withMessage('length of pin number is incorrect'),
         body('pin_number').matches(/^[A-Z]{2}[0-9]{6}$/).withMessage('Wrong pin number format'),

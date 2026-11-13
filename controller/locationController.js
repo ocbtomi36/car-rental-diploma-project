@@ -28,10 +28,11 @@ exports.getOneLocation = async (req,res,next) => {
 }
 
 exports.addLocation = async (req,res,next) => {
+    
     if(req.user_role !== 'admin' ) {
-            const error = new Error('Access denied');
-            error.statusCode = 403;
-            return next(error);
+        const error = new Error('Access denied');
+        error.statusCode = 403;
+        return next(error);
     }
     try {
         const { location_name, phone_number,locality_name, postal_code, street_name, street_type, house_number } = req.body;
@@ -76,7 +77,7 @@ exports.updateLocation = async (req,res,next) => {
         }
         updatePhoneNumber = phone_number;
         const updateLocation = new LocationModell(updateLocationName,updatePhoneNumber,fkAddress);
-        await updateLocation.updateLocation();
+        await updateLocation.updateLocation(idlocation);
         res.status(201).json({ message: 'Location is Updated', data: updateLocation });
     } catch (error) {
         return next(error);

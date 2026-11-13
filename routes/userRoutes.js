@@ -37,8 +37,8 @@ router.get('/employee/:iduser',authChain,validateUserIdParams,userDataValidateMi
 router.put('/employee/:iduser',authChain,validateUserIdParams, validateAllowedFields(insertUpdateEmployeeFields),[customerJsonValidate,addressJsonValidate], incommingDataResult ,userDataValidateMiddleware.checkEmployeeId,userDataValidateMiddleware.checkUserRole,employeeController.updateEmployee); 
 
 /* Softdelete an employee */
-router.put('/deactivate/:iduser',authChain,validateUserIdParams,userDataValidateMiddleware.checkEmployeeId,employeeController.softDelete);
+router.put('/employee/deactivate/:iduser',authChain,validateUserIdParams,userDataValidateMiddleware.checkEmployeeId,employeeController.softDelete);
 
 /* Visszahelyezi állományba a felhasználót */
-router.put('/reactivate/:iduser',authChain,validateUserIdParams,userDataValidateMiddleware.checkEmployeeId,employeeController.reActivate);
+router.put('/employee/reactivate/:iduser',authChain,validateUserIdParams,userDataValidateMiddleware.checkEmployeeId,employeeController.reActivate);
 module.exports = router

@@ -4,13 +4,9 @@ const ModellValidator = require('../modellValidadator');
 module.exports = class Location {    
 
     constructor(location_name, phone_number,addresses_idaddress){
-        ModellValidator.validateOneField("location_name",location_name);
-        ModellValidator.validateOneField("phone_number",phone_number);
-        const ValidatedAddressesIdaddress = ModellValidator.validateId("addresses_idaddress",addresses_idaddress);
-
         this.location_name = location_name;
         this.phone_number = phone_number;
-        this.addresses_idaddress = ValidatedAddressesIdaddress;
+        this.addresses_idaddress = addresses_idaddress;
     }
 
     /* Gets all data from vw_location view table */
@@ -24,7 +20,6 @@ module.exports = class Location {
     }
     /* Gets one data from vw_location view table */
     static async getOneLocationDataById(idlocation){
-        idlocation = ModellValidator.validateId("idlocation",idlocation);
         try {
             const [row] = await db.query('SELECT * FROM vw_location where idlocation = ?;',[idlocation]);    
             return row.length > 0 ? row[0] : null;
@@ -39,12 +34,10 @@ module.exports = class Location {
                 [this.location_name, this.phone_number, this.addresses_idaddress]);
                 return result.insertId;
             } catch (error) {
-
                 throw error;
             }
         }
     async updateLocation(idlocation){
-        idlocation = ModellValidator.validateId("idlocation",idlocation);
         try{
             const [result] = await db.execute('UPDATE locations SET location_name = ?, phone_number = ?, addresses_idaddress = ? WHERE (idlocation = ?);',
                 [this.location_name, this.phone_number, this.addresses_idaddress,idlocation]);

@@ -2,6 +2,10 @@ const User = require('../../model/user/userModell');
 const AddressService = require('../../service/address/addressService');
 const bcrypt = require('bcryptjs');
 exports.getAllemployees = async (req,res,next) => {
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+
     try {
         if(req.user_role === 'customer' || req.user_role === 'employee') {
             const error = new Error('Access denied');
@@ -92,13 +96,18 @@ exports.reActivate = async (req,res,next) => {
     }
     try {
         const { iduser } = req.params;
+        const { is_employed } = req.body;
         const dbIsEmployed = req.user.is_employed;
         if(dbIsEmployed === 'yes') {
         const error = new Error('Active user cannot set active again');
         error.statusCode = 409;
         return next(error);
         }
-        const is_employed = 'yes'
+        if(is_employed !== 'yes') {
+        const error = new Error('Ivalid data value');
+        error.statusCode = 422;
+        return next(error);
+        }
         await User.setEmployeeStatus(iduser,is_employed);
         res.status(200).json({ message: 'User activated successfully' });
     } catch (error) {

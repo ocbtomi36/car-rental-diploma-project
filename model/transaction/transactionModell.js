@@ -5,14 +5,11 @@ const ModellValidator = require('../modellValidadator');
 module.exports = class Transaction {
 
     constructor(transaction_name ,users_iduser, cars_idcar){
-
-        const ValidatedUserId = ModellValidator.validateId("users_iduser",users_iduser);
-        const ValidatedCarId = ModellValidator.validateId("cars_idcar",cars_idcar);
         
 
-        this.users_iduser = ValidatedUserId;
-        this.cars_idcar = ValidatedCarId;
-        this.transaction_name = ModellValidator.validateOneField("transaction_name",transaction_name);
+        this.users_iduser = users_iduser;
+        this.cars_idcar = cars_idcar;
+        this.transaction_name = transaction_name;
     }
 
     static async getAllTransaction() {
@@ -30,6 +27,7 @@ module.exports = class Transaction {
                 [this.transaction_name, this.users_iduser, this.cars_idcar]);
                 return result.insertId;
             } catch (error) {
+                console.log(error)
                 throw error;
             }
         }

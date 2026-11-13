@@ -7,7 +7,7 @@ class LocationDataValidateMiddleware {
     static async checkLocationName(req,res,next) {
         const { location_name } = req.body;
         try {
-            const getLocation = await Location.getLocationByLocationName(location_name);
+            const getLocation = await Location.getLocationObjByLocationName(location_name);
             if(getLocation !== null){
                 const error = new Error('Location must be unique');
                 error.statusCode = 409;
@@ -22,7 +22,7 @@ class LocationDataValidateMiddleware {
     static async getLocationIdByLocationName(req,res,next) {
         const { location_name } = req.body;
         try {
-            const getLocation = await Location.getLocationByLocationName(location_name);
+            const getLocation = await Location.getLocationObjByLocationName(location_name);
             if(getLocation === null) {
                 const error = new Error('There is no Location with that name');
                 error.statusCode = 404;
@@ -38,7 +38,7 @@ class LocationDataValidateMiddleware {
     static async checkPhoneNumberNumber(req,res,next) {
         const { phone_number } = req.body;
         try {
-            const getPhoneNumber = await Location.getPhoneNumByPhoneNum(phone_number);
+            const getPhoneNumber = await Location.getLocationObjByPhoneNum(phone_number);
             if(getPhoneNumber != null){
                 const error = new Error('Phone number must be unique');
                 error.statusCode = 409;
