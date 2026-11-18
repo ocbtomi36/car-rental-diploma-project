@@ -12,7 +12,7 @@ module.exports = class Location {
     /* Gets all data from vw_location view table */
     static async getAllLocation(){
         try{
-            const [row] = await db.query('SELECT * FROM vw_location');
+            const [row] = await db.query('SELECT *, COUNT(idlocation) OVER() as totalRecords * FROM vw_location LIMIT ? OFFSET ?',[limit,offset]);
             return row.length > 0 ? row : null;
         } catch(error){
             throw error;

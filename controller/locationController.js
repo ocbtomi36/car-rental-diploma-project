@@ -2,15 +2,25 @@ const LocationModell = require('../model/location/locationModell');
 const AddressService = require('../service/address/addressService');
 
 exports.getAllLocation = async (req,res,next) => {
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = 4;
+    const offset = (page - 1) * limit
+
     if(req.user_role === 'customer') {
         const error = new Error('Access denied');
         error.statusCode = 403;
         return next(error);
     }
     try {
-        const locations = await LocationModell.getAllLocation();
+
+        const locations = await LocationModell.getAllLocation(offset,limit);
+
     if(locations !== null) { 
-        res.status(200).json({message: 'Querry success', data: locations});
+        const totalRecords = locations[0].totalRecords;
+        const pages = Math.ceil(totalRecords / limit);
+        res.status(200).json({message: 'Querry success', data: locations, pages: pages});
+
     } else { 
         res.status(200).json({message: 'There is no data in database'});
      }

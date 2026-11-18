@@ -12,11 +12,12 @@ module.exports = class Transaction {
         this.transaction_name = transaction_name;
     }
 
-    static async getAllTransaction() {
+    static async getAllTransaction(limit, offset) {
         try{
-            const [row] = await db.query('SELECT * FROM vw_transaction');
+            const [row] = await db.query('SELECT *, COUNT(idtransaction) OVER() as totalRecords FROM vw_transactions LIMIT ? OFFSET ?',[limit,offset]);
             return row.length > 0 ? row : null;
         } catch(error){
+            console.log(error);
             throw error;
         }
     }

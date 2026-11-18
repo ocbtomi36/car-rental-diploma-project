@@ -21,7 +21,7 @@ module.exports = class Car {
 
     static async getAllCars(){
             try {
-                const [row] = await db.query('SELECT * FROM vw_cars');
+                const [row] = await db.query('SELECT *, COUNT(idcar) OVER() as totalRecords * FROM vw_cars LIMIT ? OFFSET ?',[limit,offset]);
                     return row.length > 0 ? row : null;
             } catch (error) {
                 

@@ -75,12 +75,11 @@ module.exports = class User {
         }
     }
 
-    static async getAllEmployeeData(){
+    static async getAllEmployeeData(offset,limit){
         try {
-            const [row] = await db.query('SELECT * FROM vw_employee');
+            const [row] = await db.query('SELECT *, COUNT(iduser) OVER() as totalRecords FROM vw_employee LIMIT ? OFFSET ?',[limit,offset]);
             return row.length > 0 ? row : null;
         } catch (error) {
-            
             throw error;
         }
     }
@@ -164,9 +163,9 @@ module.exports = class User {
         }
          
     }
-    static async getAllCustomerData(){
+    static async getAllCustomerData(offset, limit){
         try {
-            const [row] = await db.query('SELECT * FROM vw_customer');
+            const [row] = await db.query('SELECT *, COUNT(iduser) OVER() as totalRecords FROM vw_customer LIMIT ? OFFSET ?',[limit,offset]);
             return row.length > 0 ? row : null;
         } catch (error) {
             

@@ -4,7 +4,8 @@ const bcrypt = require('bcryptjs');
 exports.getAllemployees = async (req,res,next) => {
 
     const page = parseInt(req.query.page) || 1;
-    const limit = 10;
+    const limit = 4;
+    const offset = (page - 1) * limit
 
     try {
         if(req.user_role === 'customer' || req.user_role === 'employee') {
@@ -12,11 +13,13 @@ exports.getAllemployees = async (req,res,next) => {
             error.statusCode = 403;
             return next(error);
         }
-        const result = await User.getAllEmployeeData();
-        if(result !== null) {
-        res.status(200).json({message: 'Querry success', data: result});
+            const result = await User.getAllEmployeeData(offset,limit);
+            if(result !== null) {
+            const totalRecords = result[0].totalRecords;
+            const pages = Math.ceil(totalRecords / limit);
+            res.status(200).json({message: 'Querry success', data: result, pages: pages});
         } else {
-        res.status(200).json({message: 'There is no data in database', data: []})
+            res.status(200).json({message: 'There is no data in database', data: []})
         }
     } catch (error) {
         return next(error);

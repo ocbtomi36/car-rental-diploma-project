@@ -32,15 +32,24 @@ const insert = async(req, res,next, carStatusParam,transactionName) => {
 }
 
     exports.getAllTransactions = async (req,res,next) => {
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const offset = (page - 1) * limit
+
+
         if(req.user_role === 'customer') {
             const error = new Error('Access denied');
             error.statusCode = 403;
             return next(error);
         }
         try {
-            const transactions = await TransactionModell.getAllTransaction();
+
+            const transactions = await TransactionModell.getAllTransaction(limit, offset);
             if(transactions !== null) { 
-                res.status(200).json({message: 'Querry success', data: transactions});
+                const totalRecords = transactions[0].totalRecords;
+                const pages = Math.ceil(totalRecords / limit);
+                res.status(200).json({message: 'Querry success', data: transactions, pages: pages });
             } else { 
                 res.status(200).json({message: 'There is no data in database'});
             }

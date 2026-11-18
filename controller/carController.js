@@ -7,6 +7,11 @@ const ProductionTimeService = require('../service/car/productionTimeService');
 
 exports.getAllCars = async (req,res,next) => {
 
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = 4;
+    const offset = (page - 1) * limit
+
     if(req.user_role === 'customer') {
             const error = new Error('Access denied');
             error.statusCode = 403;
@@ -15,6 +20,8 @@ exports.getAllCars = async (req,res,next) => {
     try {
         const cars = await CarModell.getAllCars();
         if( cars !== null) { 
+            const totalRecords = cars[0].totalRecords;
+            const pages = Math.ceil(totalRecords/ limit)
             res.status(200).json({message: 'Querry success', data: cars});
         } else { 
             res.status(200).json({message: 'There is no data in database'});

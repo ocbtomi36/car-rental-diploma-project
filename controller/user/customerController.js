@@ -4,15 +4,22 @@ const User = require('../../model/user/userModell');
 
 
 exports.getAllCustomers = async (req,res,next) => {
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = 4;
+    const offset = (page - 1) * limit
+
     try {
         if(req.user_role === 'customer') {
             const error = new Error('Access denied');
             error.statusCode = 403;
             return next(error);
         }
-        const result = await User.getAllCustomerData();
+        const result = await User.getAllCustomerData(offset,limit);
         if(result !== null) {
-        res.status(200).json({message: 'Querry success', data: result});
+            const totalRecords = result[0].totalRecords;
+            const pages = Math.ceil(totalRecords / limit);
+            res.status(200).json({message: 'Querry success', data: result, pages: pages});
         } else {
             res.status(200).json({message: 'There is no data in database'})
         }
